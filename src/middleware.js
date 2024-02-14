@@ -11,7 +11,10 @@ export async function middleware(req) {
     return;
   }
 
-  if (req.nextUrl.pathname === "/login") {
+  if (
+    req.nextUrl.pathname === "/login" ||
+    req.nextUrl.pathname === "/register"
+  ) {
     return NextResponse.next();
   }
 

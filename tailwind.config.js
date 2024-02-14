@@ -102,6 +102,10 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        info: "#3FA2F7",
+        positive: "#56C568",
+        negative: "#EB5757",
+        warning: "#FFC400",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

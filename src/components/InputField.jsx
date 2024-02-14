@@ -22,7 +22,7 @@ function InputField({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative mt-2">
       <FormField
         control={form.control}
         name={name}

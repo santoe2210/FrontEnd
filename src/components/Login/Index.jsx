@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,28 +39,32 @@ function Index() {
   }
 
   return (
-    <div className="max-w-[600px] mx-auto">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleLogin)}>
-          <InputField
-            label="Username"
-            name="username"
-            form={form}
-            placeholder="Admin"
-          />
-          <InputField
-            label="Password"
-            name="password"
-            form={form}
-            type="password"
-            placeholder="xxxx"
-          />
-          <Button disabled={apiLoading} type="submit" className="w-full mt-10">
-            {apiLoading ? "Please wait" : "Login"}
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleLogin)}>
+        <InputField
+          label="Username"
+          name="username"
+          form={form}
+          placeholder="Admin"
+        />
+        <InputField
+          label="Password"
+          name="password"
+          form={form}
+          type="password"
+          placeholder="xxxx"
+        />
+        <Button disabled={apiLoading} type="submit" className="w-full mt-8">
+          {apiLoading ? "Please wait" : "Login"}
+        </Button>
+        <p className="text-center text-sm mt-4">
+          Don't have an account?{" "}
+          <Link href="/register" className="text-info">
+            Join Us
+          </Link>
+        </p>
+      </form>
+    </Form>
   );
 }
 

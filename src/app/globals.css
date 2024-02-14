@@ -50,6 +50,47 @@
 }
 
 @layer base {
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-4xl;
+  }
+
+  h3 {
+    @apply text-3xl;
+  }
+  h4 {
+    @apply text-2xl;
+  }
+
+  h5 {
+    @apply text-xl;
+  }
+  h6 {
+    @apply text-lg;
+  }
+
+  .p1 {
+    @apply text-md;
+  }
+
+  .p2 {
+    @apply text-base;
+  }
+
+  .p3 {
+    @apply text-sm;
+  }
+
+  .p4 {
+    @apply text-xsm;
+  }
+
+  .p5 {
+    @apply text-xxsm;
+  }
+
   * {
     @apply border-border;
   }
