@@ -89,7 +89,7 @@ function Index() {
   });
 
   async function handleLogin(values) {
-    console.log(values);
+    console.log(values, "testing");
   }
 
   // function render icon check validate password
