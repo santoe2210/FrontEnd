@@ -1,6 +1,12 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+import { config } from "@fortawesome/fontawesome-svg-core";
+import Navbar from "@/components/Layout/Navbar";
+import Sidebar from "@/components/Layout/Sidebar";
+config.autoAddCss = false;
 
 const roboto = Roboto({
   weight: ["400", "500", "700", "900"],
@@ -23,7 +29,9 @@ export default function RootLayout({ children }) {
           roboto.variable
         )}
       >
-        {children}
+        <Navbar />
+        <Sidebar />
+        <main className="ml-56 min-h-screen mt-20">{children}</main>
       </body>
     </html>
   );

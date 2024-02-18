@@ -104,3 +104,7 @@ html {
   padding: 0;
   /* font-family: var(--font-roboto), sans-serif; */
 }
+
+.sidebar .active {
+  font-weight: 700;
+}

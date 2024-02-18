@@ -3,6 +3,13 @@ import { NextResponse } from "next/server";
 const PUBLIC_FILE = /\.(.*)$/;
 
 export async function middleware(req) {
+  const paths = [
+    "/login",
+    "/register",
+    "/activate-email",
+    "/register-completed",
+  ];
+
   if (
     req.nextUrl.pathname.startsWith("/_next") ||
     req.nextUrl.pathname.includes("/api/") ||
@@ -11,10 +18,7 @@ export async function middleware(req) {
     return;
   }
 
-  if (
-    req.nextUrl.pathname === "/login" ||
-    req.nextUrl.pathname === "/register"
-  ) {
+  if (paths.includes(req.nextUrl.pathname)) {
     return NextResponse.next();
   }
 
