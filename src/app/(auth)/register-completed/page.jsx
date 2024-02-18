@@ -7,7 +7,7 @@ function RegisterCompleted() {
   const resendEmail = () => {};
 
   return (
-    <div className="p-[9em] max-w-[768px] mx-auto text-center">
+    <div className="max-w-[768px] mx-auto text-center">
       <FontAwesomeIcon
         icon={faCircleCheck}
         className="text-[100px] text-positive"

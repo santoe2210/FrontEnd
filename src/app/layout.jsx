@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
+import MainLayout from "@/components/Layout/MainLayout";
 import Navbar from "@/components/Layout/Navbar";
 import Sidebar from "@/components/Layout/Sidebar";
 config.autoAddCss = false;
@@ -24,14 +25,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={cn(
-          "min-h-screen bg-background antialiased font-sans",
-          roboto.variable
-        )}
+        className={cn("bg-background antialiased font-sans", roboto.variable)}
       >
         <Navbar />
         <Sidebar />
-        <main className="ml-56 min-h-screen mt-20">{children}</main>
+        <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

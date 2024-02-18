@@ -1,7 +1,10 @@
 import React from "react";
 import Link from "next/link";
+import { getToken } from "@/app/utils/cookie";
+import NavProfile from "./NavProfile";
 
-function Navbar() {
+async function Navbar() {
+  const token = await getToken();
   return (
     <div className="fixed left-0 top-0 w-full z-10">
       <div className="w-full bg-primary h-2.5" />
@@ -17,12 +20,16 @@ function Navbar() {
               </a>
             </div>
             <nav className="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row mr-[25px]">
-              <Link
-                className="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                href="/login"
-              >
-                Sign In
-              </Link>
+              {token ? (
+                <NavProfile />
+              ) : (
+                <Link
+                  className="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                  href="/login"
+                >
+                  Sign In
+                </Link>
+              )}
             </nav>
           </div>
         </div>

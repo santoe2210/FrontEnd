@@ -23,7 +23,7 @@ const ForgotPasswordPage = () => {
 
   const handleEmailSubmit = async (values) => {
     console.log(values.email);
-    router.push("/login");
+    router.push(`/reset-password/${values.email}`);
   };
 
   const form = useForm({
@@ -34,8 +34,8 @@ const ForgotPasswordPage = () => {
   });
 
   return (
-    <div className="container flex flex-col items-center mx-auto gap-10 py-10 w-full max-w-3xl">
-      <h3 className="text-primary">Forgot Your Password?</h3>
+    <div className="max-w-[600px] mx-auto">
+      <h3 className="text-primary font-bold">Forgot Your Password?</h3>
       <p>
         Enter the email address associated with your account and we’ll send you
         a link to reset your password.
@@ -43,7 +43,7 @@ const ForgotPasswordPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleEmailSubmit)}
-          className="space-y-8 w-full "
+          className="w-full "
         >
           <InputField
             label="Email"

@@ -54,7 +54,7 @@ function Index() {
           type="password"
           placeholder="xxxx"
         />
-        <Link href="/user/forgot-password" className="text-info block mt-2">
+        <Link href="/forgot-password" className="text-info block mt-2">
           <span className=" text-sm">Forgot your password?</span>
         </Link>
         <Button disabled={apiLoading} type="submit" className="w-full mt-2">

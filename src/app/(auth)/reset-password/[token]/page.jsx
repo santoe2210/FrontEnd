@@ -12,21 +12,27 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-const formSchema = z.object({
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters." })
-    .max(32, { message: "Password should not exceed 32 characters." })
-    .regex(/[A-Z]/, { message: "One uppercase character is required." })
-    .regex(/[a-z]/, { message: "One lowercase character is required." })
-    .regex(/[0-9]/, { message: "One number is required." })
-    .regex(/[^A-Za-z0-9]/, {
-      message: "One special character is required.",
-    })
-    .regex(/^[~`!@#$%^&*()_+=[\]\\{}|;':",.<>?a-zA-Z0-9-]+$/, {
-      message: "Password must be English letters.",
-    }),
-});
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters." })
+      .max(32, { message: "Password should not exceed 32 characters." })
+      .regex(/[A-Z]/, { message: "One uppercase character is required." })
+      .regex(/[a-z]/, { message: "One lowercase character is required." })
+      .regex(/[0-9]/, { message: "One number is required." })
+      .regex(/[^A-Za-z0-9]/, {
+        message: "One special character is required.",
+      })
+      .regex(/^[~`!@#$%^&*()_+=[\]\\{}|;':",.<>?a-zA-Z0-9-]+$/, {
+        message: "Password must be English letters.",
+      }),
+    confirmpassword: z.string().min(1, { message: "This field is required." }),
+  })
+  .refine((data) => data.password === data.confirmpassword, {
+    path: ["confirmpassword"],
+    message: "Passwords does not match",
+  });
 
 const renderCheckValidatePassword = (values, validate) => {
   const regexMinMax = /^.{8,32}$/g;
@@ -73,10 +79,11 @@ function ResetPasswordPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
+      confirmpassword: "",
     },
   });
   return (
-    <div className="container flex flex-col items-center mx-auto gap-10 py-10 w-full max-w-3xl">
+    <div className="max-w-[600px] mx-auto">
       <h3 className="text-primary">Change Your Password</h3>
       <Form {...form}>
         <form
@@ -131,6 +138,14 @@ function ResetPasswordPage() {
               </div>
             </div>
           </div>
+
+          <InputField
+            label="Confirm New Password"
+            name="confirmpassword"
+            form={form}
+            type="password"
+            placeholder="xxxx"
+          />
 
           <Button disabled={apiLoading} type="submit" className="w-full mt-8">
             {apiLoading ? "Please wait" : "Change Password"}

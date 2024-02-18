@@ -1,15 +1,28 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { getToken } from "@/app/utils/cookie";
 import { cn } from "@/lib/utils";
 import NavLink from "./NavLink";
+import { usePathname } from "next/navigation";
 
-export default async function Sidebar() {
-  const token = await getToken();
+export default function Sidebar() {
+  const pathname = usePathname();
+  const [token, setToken] = useState(null);
   const menus = [
     { id: 0, name: "Dashboard", link: "/" },
     { id: 0, name: "Test", link: "/test" },
     { id: 0, name: "Option", link: "/option" },
   ];
+
+  async function getTk() {
+    const tk = await getToken();
+    setToken(tk);
+  }
+
+  useEffect(() => {
+    getTk();
+  }, [pathname]);
 
   return (
     <aside

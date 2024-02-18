@@ -1,7 +1,7 @@
 import Index from "@/components/Login/Index";
 import React from "react";
 
-function page() {
+function login() {
   return (
     <div className="max-w-[600px] mx-auto">
       <Index />
@@ -9,4 +9,4 @@ function page() {
   );
 }
 
-export default page;
+export default login;

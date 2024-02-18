@@ -6,8 +6,6 @@ import { useTable, usePagination, useFilters, useSortBy } from "react-table";
 import { useRouter } from "next/navigation";
 
 import MakeTable from "../MakeTable";
-import { Button } from "../ui/button";
-import { deleteToken } from "@/app/utils/cookie";
 
 export default function ArticleTable() {
   const loading = { show: true, error: "" };
@@ -171,16 +169,9 @@ export default function ArticleTable() {
     pageIndex,
   };
 
-  async function handleCookie() {
-    await deleteToken();
-    router.push("/login");
-  }
-
   return (
     <>
-      <div className="mb-8 mt-10">
-        <p>hey</p>
-        <Button onClick={handleCookie}>Delete Cookies</Button>
+      <div className="mb-8 pt-10">
         <MakeTable loading={loading} propsToTable={propsToTable} />
       </div>
     </>
