@@ -12,12 +12,12 @@ async function Navbar() {
         <div className="w-full text-gray-700 bg-white">
           <div className="flex flex-col h-[70px] max-w-full pl-5 pr-6 mx-auto md:items-center md:justify-between md:flex-row md:px-6">
             <div className="flex flex-row items-center justify-between py-4">
-              <a
+              <Link
                 href="/"
                 className="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg focus:outline-none focus:shadow-outline"
               >
                 logo
-              </a>
+              </Link>
             </div>
             <nav className="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row mr-[25px]">
               {token ? (
