@@ -11,8 +11,9 @@ export default function Sidebar() {
   const [token, setToken] = useState(null);
   const menus = [
     { id: 0, name: "Dashboard", link: "/" },
-    { id: 0, name: "Test", link: "/test" },
-    { id: 0, name: "Option", link: "/option" },
+    { id: 1, name: "Test", link: "/test" },
+    { id: 2, name: "Option", link: "/option" },
+    { id: 3, name: "Closure Date", link: "/admin/closure-date" },
   ];
 
   async function getTk() {
