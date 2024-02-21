@@ -33,7 +33,12 @@ function Index() {
 
     await setToken(values.username);
 
-    router.push("/marketing-manager");
+    const routes = {
+      MMR: "/marketing-manager",
+      Admin: "/admin",
+    };
+
+    router.push(routes[values.username]);
 
     setApiLoading(false);
   }

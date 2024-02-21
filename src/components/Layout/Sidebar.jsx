@@ -20,6 +20,11 @@ export default function Sidebar() {
     { id: 1, name: "Contributions", link: "/marketing-manager/contributions" },
   ];
 
+  const menusAdmin = [
+    { id: 0, name: "Dashboard", link: "/admin" },
+    { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
+  ];
+
   async function getTk() {
     const tk = await getToken();
     setToken(tk);
@@ -28,6 +33,13 @@ export default function Sidebar() {
   useEffect(() => {
     getTk();
   }, [pathname]);
+
+  const getMenus = () => {
+    if (pathname.startsWith("/admin")) {
+      return menusAdmin;
+    }
+    return menusMMR;
+  };
 
   return (
     <aside
@@ -39,7 +51,7 @@ export default function Sidebar() {
     >
       <div className="overflow-y-auto rounded h-[calc(100vh-115px)]">
         <ul>
-          {menusMMR.map((item) => (
+          {getMenus().map((item) => (
             <NavLink key={item.id} name={item.name} link={item.link} />
           ))}
         </ul>
