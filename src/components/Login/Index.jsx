@@ -33,7 +33,7 @@ function Index() {
 
     await setToken(values.username);
 
-    router.push("/");
+    router.push("/marketing-manager");
 
     setApiLoading(false);
   }

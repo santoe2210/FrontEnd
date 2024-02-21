@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={cn("bg-background antialiased font-sans", roboto.variable)}
+        className={cn("bg-gray-200 antialiased font-sans", roboto.variable)}
       >
         <Navbar />
         <Sidebar />

@@ -11,8 +11,13 @@ export default function Sidebar() {
   const [token, setToken] = useState(null);
   const menus = [
     { id: 0, name: "Dashboard", link: "/" },
-    { id: 0, name: "Test", link: "/test" },
-    { id: 0, name: "Option", link: "/option" },
+    { id: 1, name: "Test", link: "/test" },
+    { id: 2, name: "Option", link: "/option" },
+  ];
+
+  const menusMMR = [
+    { id: 0, name: "Dashboard", link: "/marketing-manager" },
+    { id: 1, name: "Contributions", link: "/marketing-manager/contributions" },
   ];
 
   async function getTk() {
@@ -34,7 +39,7 @@ export default function Sidebar() {
     >
       <div className="overflow-y-auto rounded h-[calc(100vh-115px)]">
         <ul>
-          {menus.map((item) => (
+          {menusMMR.map((item) => (
             <NavLink key={item.id} name={item.name} link={item.link} />
           ))}
         </ul>
