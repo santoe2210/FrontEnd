@@ -13,7 +13,16 @@ export default function Sidebar() {
     { id: 0, name: "Dashboard", link: "/" },
     { id: 1, name: "Test", link: "/test" },
     { id: 2, name: "Option", link: "/option" },
-    { id: 3, name: "Closure Date", link: "/admin/closure-date" },
+  ];
+
+  const menusMMR = [
+    { id: 0, name: "Dashboard", link: "/marketing-manager" },
+    { id: 1, name: "Contributions", link: "/marketing-manager/contributions" },
+  ];
+
+  const menusAdmin = [
+    { id: 0, name: "Dashboard", link: "/admin" },
+    { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
   ];
 
   async function getTk() {
@@ -25,6 +34,13 @@ export default function Sidebar() {
     getTk();
   }, [pathname]);
 
+  const getMenus = () => {
+    if (pathname.startsWith("/admin")) {
+      return menusAdmin;
+    }
+    return menusMMR;
+  };
+
   return (
     <aside
       className={cn(
@@ -35,7 +51,7 @@ export default function Sidebar() {
     >
       <div className="overflow-y-auto rounded h-[calc(100vh-115px)]">
         <ul>
-          {menus.map((item) => (
+          {getMenus().map((item) => (
             <NavLink key={item.id} name={item.name} link={item.link} />
           ))}
         </ul>
