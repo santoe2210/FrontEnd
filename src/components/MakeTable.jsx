@@ -188,8 +188,8 @@ export default function MakeTable({
                               ...cell.column.style,
                             }}
                             className={cn(
-                              i === page.length - 1 ? "rounded-b-[10px]" : "",
-                              "px-6 py-4 text-gray-500 whitespace-nowrap"
+                              i === page.length - 1 ? "rounded-b-0" : "",
+                              "px-6 py-4 text-gray-500 whitespace-nowrap p3"
                             )}
                           >
                             {cell.render("Cell")}
