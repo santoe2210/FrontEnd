@@ -23,6 +23,11 @@ export default function Sidebar() {
   const menusAdmin = [
     { id: 0, name: "Dashboard", link: "/admin" },
     { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
+    {
+      id: 2,
+      name: "Set Clousure Date",
+      link: "/admin/closure-date/set-closure-date",
+    },
   ];
 
   async function getTk() {
