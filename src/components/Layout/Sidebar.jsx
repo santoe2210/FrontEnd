@@ -31,6 +31,11 @@ export default function Sidebar() {
       name: "Set Clousure Date",
       link: "/admin/closure-date/set-closure-date",
     },
+    {
+      id: 3,
+      name: "System Users",
+      link: "/admin/system-users",
+    },
   ];
 
   async function getTk() {
