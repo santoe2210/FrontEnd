@@ -5,14 +5,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { Form } from "@/components/ui/form";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import InputFieldCalendar from "@/components/InputFieldCalendar";
 import SelectField from "@/components/SelectField";
-import { Separator } from "@/components/ui/separator";
-
-import { useState } from "react";
 import Link from "next/link";
 
 const FormSchema = z.object({
@@ -32,11 +30,7 @@ const year = [
   { id: 4, name: "2028", value: "2028" },
 ];
 const SetClosureDatePage = () => {
-  const [academicDates, setAcademicDates] = useState({
-    academicYear: "",
-    closureDate: "",
-    finalClosureDate: "",
-  });
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -46,13 +40,29 @@ const SetClosureDatePage = () => {
     },
   });
   const { toast } = useToast();
-  function onSubmit(data) {
-    const { academicYear, closureDate, finalClosureDate } = data;
+
+  function isValidClosureDate({ closureDate, finalClosureDate, academicYear }) {
+    const closureYear = new Date(closureDate).getFullYear();
+    const finalClosureYear = new Date(finalClosureDate).getFullYear();
+
+    // Check if the academic year is equal to the closure date year or the final closure date year
     if (
-      Number(academicYear) > closureDate.getFullYear() ||
-      Number(academicYear) > finalClosureDate.getFullYear() ||
-      closureDate.getDate() >= finalClosureDate.getDate()
+      Number(academicYear) !== closureYear ||
+      Number(academicYear) !== finalClosureYear
     ) {
+      return false;
+    }
+
+    // Check if closure date is greater than final closure date
+    if (new Date(closureDate) > new Date(finalClosureDate)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function onSubmit(data) {
+    if (!isValidClosureDate(data)) {
       toast({
         title: "Error Setting Academic Closure Dates",
         description:
@@ -61,16 +71,13 @@ const SetClosureDatePage = () => {
       });
       return;
     }
-    setAcademicDates((prevDates) => ({
-      ...prevDates,
-      academicYear: academicYear,
-      closureDate: closureDate.toDateString(),
-      finalClosureDate: finalClosureDate.toDateString(),
-    }));
+
     toast({
       description: "Successfully set academic closure dates",
       action: <ToastAction altText="OK">OK</ToastAction>,
     });
+
+    router.push("/admin/closure-date");
   }
   return (
     <>
@@ -92,25 +99,24 @@ const SetClosureDatePage = () => {
         </Link>{" "}
         &gt; <span className="font-bold"> Set Closure Date</span>{" "}
       </div>
-      <div className="container flex items-center justify-between">
-        <div className="flex-1 w-32">
+      <div className="py-9 px-12">
+        <div className="max-w-[550px] mx-auto">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="mt-8">
-                <div className="max-w-[200px]">
-                  <SelectField
-                    label="Academic Year"
-                    name="academicYear"
-                    form={form}
-                    data={year}
-                  />
-                </div>
+                <SelectField
+                  label="Academic Year"
+                  name="academicYear"
+                  form={form}
+                  data={year}
+                />
                 <InputFieldCalendar
                   form={form}
                   name="closureDate"
                   label="Closure Date"
                   placeholder="Select a closure date"
                   desc="Set closure date for aricle submission"
+                  maxDate={new Date("2030-12-31")}
                 />
                 <InputFieldCalendar
                   form={form}
@@ -118,42 +124,14 @@ const SetClosureDatePage = () => {
                   label="Final Closure Date"
                   placeholder="Select a final closure date"
                   desc="Set final closure date for aricle submission"
+                  maxDate={new Date("2030-12-31")}
                 />
               </div>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
             </form>
           </Form>
-        </div>
-        <Separator orientation="vertical" className=" h-96 m-8" />
-        <div className="flex-1 w-64">
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium leading-none">Academic Year</h4>
-            <p className="text-sm text-muted-foreground">
-              {academicDates.academicYear !== ""
-                ? academicDates.academicYear
-                : "----"}
-            </p>
-          </div>
-          <Separator className="my-4" />
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium leading-none">Closure Date</h4>
-            <p className="text-sm text-muted-foreground">
-              {academicDates.closureDate !== ""
-                ? academicDates.closureDate
-                : "----"}
-            </p>
-          </div>
-          <Separator className="my-4" />
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium leading-none">
-              Final Closure Date
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              {academicDates.finalClosureDate !== ""
-                ? academicDates.finalClosureDate
-                : "----"}
-            </p>
-          </div>
         </div>
       </div>
     </>

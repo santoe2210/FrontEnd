@@ -17,11 +17,6 @@ const page = () => {
         </Link>{" "}
         &gt; <span className="font-bold">Academic Closure Dates</span>{" "}
       </div>
-      <div className="flex justify-end m-4 ">
-        <Link href="/admin/closure-date/set-closure-date">
-          <Button>Set Closure Date</Button>
-        </Link>
-      </div>
       <div className="py-9 px-12">
         <ClosureDateTable />
       </div>

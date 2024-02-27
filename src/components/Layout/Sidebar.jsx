@@ -1,16 +1,10 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { getToken } from "@/app/utils/cookie";
+import React from "react";
 import { cn } from "@/lib/utils";
 import NavLink from "./NavLink";
-import { usePathname } from "next/navigation";
-import { Skeleton } from "../ui/skeleton";
+import { getToken } from "@/app/utils/cookie";
 
-export default function Sidebar() {
-  const pathname = usePathname();
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(false);
+export default async function Sidebar() {
+  const token = await getToken();
 
   const menus = [
     { id: 0, name: "Dashboard", link: "/" },
@@ -27,30 +21,14 @@ export default function Sidebar() {
     { id: 0, name: "Dashboard", link: "/admin" },
     { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
     {
-      id: 2,
-      name: "Set Clousure Date",
-      link: "/admin/closure-date/set-closure-date",
-    },
-    {
       id: 3,
       name: "System Users",
       link: "/admin/system-users",
     },
   ];
 
-  async function getTk() {
-    setLoading(true);
-    const tk = await getToken();
-    setToken(tk);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getTk();
-  }, [pathname]);
-
   const getMenus = () => {
-    if (pathname.startsWith("/admin")) {
+    if (token === "Admin") {
       return menusAdmin;
     }
     return menusMMR;
@@ -73,9 +51,6 @@ export default function Sidebar() {
           </ul>
         </div>
       </aside>
-      {loading && (
-        <Skeleton className="w-56 fixed left-0 top-20 sidebar border-r-[1px] h-full" />
-      )}
     </>
   );
 }

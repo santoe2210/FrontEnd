@@ -8,6 +8,7 @@ import MainLayout from "@/components/Layout/MainLayout";
 import Navbar from "@/components/Layout/Navbar";
 import Sidebar from "@/components/Layout/Sidebar";
 import Footer from "@/components/Layout/Footer";
+import { Toaster } from "@/components/ui/toaster";
 config.autoAddCss = false;
 
 const roboto = Roboto({
@@ -31,7 +32,8 @@ export default function RootLayout({ children }) {
         <Navbar />
         <Sidebar />
         <MainLayout>{children}</MainLayout>
-        <Footer/>
+        {/* <Footer /> */}
+        <Toaster />
       </body>
     </html>
   );

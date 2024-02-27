@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 export async function setToken(token) {
-  const expires = new Date(Date.now() + 1000 * 1000);
+  const expires = new Date(Date.now() + 9000 * 1000);
 
   cookies().set("token", token, { expires, httpOnly: true, path: "/" });
 }

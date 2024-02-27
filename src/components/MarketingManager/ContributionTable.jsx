@@ -1,15 +1,40 @@
 "use client";
 
-import React, { useState, useRef, useMemo } from "react";
-import { useTable, usePagination, useFilters, useSortBy } from "react-table";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+
+import {
+  useTable,
+  usePagination,
+  useFilters,
+  useSortBy,
+  useRowSelect,
+  useGlobalFilter,
+} from "react-table";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import MakeTable from "../MakeTable";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import moment from "moment";
 
 function ContributionTable() {
   const loading = { show: true, error: "" };
   const [filterInput, setFilterInput] = useState("");
+  const [searchData, setSearchData] = useState([]);
+  const [dropdownFilter, setDropdownFilter] = useState("All");
+  const [filters] = useState(["article_name"]);
   const searchInputRef = useRef(null);
 
   const defaultColumn = React.useMemo(
@@ -62,6 +87,61 @@ function ContributionTable() {
 
   const data = useMemo(() => ex || [], []);
 
+  const IndeterminateCheckbox = React.forwardRef(
+    ({ indeterminate, ...rest }, ref) => {
+      const defaultRef = useRef();
+      const resolvedRef = ref || defaultRef;
+
+      useEffect(() => {
+        resolvedRef.current.indeterminate = indeterminate;
+      }, [resolvedRef, indeterminate]);
+
+      return (
+        <label>
+          <input
+            type="checkbox"
+            className="default__check"
+            ref={resolvedRef}
+            {...rest}
+          />
+          <span className="custom__check" />
+        </label>
+      );
+    }
+  );
+
+  function customCheckboxHeader(modifiedOnChange, checked, disabled) {
+    const component = useMemo(() => (
+      <div>
+        <IndeterminateCheckbox
+          onChange={modifiedOnChange}
+          checked={checked}
+          disabled={disabled}
+        />
+      </div>
+    ));
+
+    return component;
+  }
+
+  function customCheckboxCell(row) {
+    useEffect(() => {
+      if (row.original.status === "APR") {
+        toggleRowSelected(row.id, true);
+      }
+    }, [row.original.status]);
+    const component = useMemo(() => (
+      <div>
+        <IndeterminateCheckbox
+          {...row.getToggleRowSelectedProps()}
+          disabled={row.original.disabled || row.original.status === "APR"}
+        />
+      </div>
+    ));
+
+    return component;
+  }
+
   const CellDate = (tableProps) => {
     const component = useMemo(
       () => moment(tableProps.row.original.date).format("DD MMM YYYY HH:mm"),
@@ -78,19 +158,6 @@ function ContributionTable() {
           {!tableProps.row.original.comment
             ? "-"
             : tableProps.row.original.comment}
-        </p>
-      ),
-      [tableProps]
-    );
-
-    return component;
-  };
-
-  const cellInfo = (tableProps) => {
-    const component = useMemo(
-      () => (
-        <p className="p3">
-          {tableProps.row.original.status ? "Approved" : "Edit"}
         </p>
       ),
       [tableProps]
@@ -137,17 +204,24 @@ function ContributionTable() {
         maxWidth: 84,
         Cell: (tableProps) => CellComment(tableProps),
       },
-      {
-        Header: "Status",
-        accessor: "status",
-        disableSortBy: true,
-        width: 170,
-        maxWidth: 170,
-        style: { whiteSpace: "unset" },
-        Cell: (tableProps) => cellInfo(tableProps),
-      },
     ],
     []
+  );
+
+  const ourGlobalFilterFunction = useCallback(
+    (rows, _, query) =>
+      rows.filter((row) =>
+        filters.find((columnName) => {
+          if (
+            row.values[columnName].toLowerCase().includes(query.toLowerCase())
+          ) {
+            return row;
+          }
+
+          return null;
+        })
+      ),
+    [filters]
   );
 
   const {
@@ -165,21 +239,78 @@ function ContributionTable() {
     nextPage,
     previousPage,
     setPageSize,
-
+    setFilter,
+    preGlobalFilteredRows,
+    setGlobalFilter,
     state: { pageIndex },
   } = useTable(
     {
       columns,
-      data,
+      data: searchData.length > 0 ? searchData : data,
+      globalFilter: ourGlobalFilterFunction,
       defaultColumn,
       initialState: {
-        pageSize: 2,
+        pageSize: 10,
       },
     },
+    useGlobalFilter,
     useFilters,
     useSortBy,
-    usePagination
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((_columns) => [
+        {
+          id: "selection",
+          Header: ({
+            toggleRowSelected: headertoggleRowSelected,
+            isAllPageRowsSelected,
+            page: headerpage,
+          }) => {
+            const modifiedOnChange = (event) => {
+              headerpage.forEach((row) => {
+                if (!row.original.disabled && row.original.status !== "APR") {
+                  headertoggleRowSelected(row.id, event.currentTarget.checked);
+                }
+              });
+            };
+
+            let selectableRowsInCurrentPage = 0;
+            let selectedRowsInCurrentPage = 0;
+            headerpage.forEach((row) => {
+              if (row.isSelected) selectedRowsInCurrentPage += 1;
+              if (!row.original.disabled) selectableRowsInCurrentPage += 1;
+            });
+
+            const disabled =
+              headerpage.every(
+                (row) => row.original.status === "APR" || row.original.disabled
+              ) || selectableRowsInCurrentPage === 0;
+            const checked =
+              (isAllPageRowsSelected ||
+                selectableRowsInCurrentPage === selectedRowsInCurrentPage) &&
+              !disabled;
+
+            return customCheckboxHeader(modifiedOnChange, checked, disabled);
+          },
+
+          width: 0,
+          maxWidth: 0,
+          minWidth: 0,
+          Cell: ({ row }) => customCheckboxCell(row),
+        },
+        ..._columns,
+      ]);
+    }
   );
+
+  const dropdownOptions = useMemo(() => {
+    const options = new Set();
+    preGlobalFilteredRows.forEach((row) => {
+      options.add(row.values.faculty_type);
+    });
+    return ["All", ...options.values()];
+  }, [preGlobalFilteredRows]);
 
   const propsToTable = {
     getTableProps,
@@ -199,13 +330,44 @@ function ContributionTable() {
     pageIndex,
   };
 
-  const handleOnSubmitInput = () => {};
+  const handleOnSubmitInput = (e) => {
+    e.preventDefault();
 
-  const handleFilterChange = (e) => {};
+    const value = searchInputRef.current.value || "";
+
+    setGlobalFilter(value);
+
+    setFilterInput(value);
+  };
+
+  const handleFilterChange = (e) => {
+    const value = e.target.value || "";
+
+    if (value === "") {
+      setGlobalFilter(value);
+      setSearchData([]);
+    }
+
+    setFilterInput(value);
+  };
+
+  const handleFilterDropdown = useCallback((value) => {
+    if (value === "All") {
+      setFilter("faculty_type", undefined);
+      setDropdownFilter("All");
+    } else {
+      setFilter("faculty_type", value || undefined);
+      setDropdownFilter(value);
+    }
+  }, []);
+
+  const handleDownload = () => {
+    console.log(page);
+  };
 
   return (
     <>
-      <div className="pb-12 flex justify-between xlmx:flex-col">
+      <div className="pb-12 flex justify-between items-end xlmx:flex-col">
         <form
           noValidate
           onSubmit={handleOnSubmitInput}
@@ -234,27 +396,30 @@ function ContributionTable() {
             Search
           </Button>
 
-          <Button>Export .CSV</Button>
-
-          {/* {toDownloadCSV && (
-            <CSVLink
-              data={toDownloadCSV}
-              filename="user-list.csv"
-              ref={csvRef}
-            />
-          )} */}
+          <Button type="button" onClick={handleDownload}>
+            Export .CSV
+          </Button>
         </form>
-        {/* <div className="mr-8 w-40">
-          <Select
-            values={dropdownOptions}
-            selectedValue={dropdownFilter}
-            setSelectedValue={setDropdownFilter}
-            label="User Status"
-            setFilter={setFilter}
-            callback={handleFilterDropdown}
-          />
-        </div> */}
+
+        <div>
+          <p className="p3 font-bold mb-1">Faculty Type</p>
+          <Select value={dropdownFilter} onValueChange={handleFilterDropdown}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {dropdownOptions.map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
       <MakeTable loading={loading} propsToTable={propsToTable} />
     </>
   );

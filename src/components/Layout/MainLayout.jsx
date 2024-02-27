@@ -12,7 +12,7 @@ function MainLayout({ children }) {
     <main
       className={cn(
         !paths.some((path) => pathname.startsWith(path)) && "ml-56",
-        "mt-20 relative"
+        "mt-20 relative min-h-screen"
       )}
     >
       {children}

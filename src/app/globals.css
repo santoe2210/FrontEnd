@@ -112,3 +112,78 @@ html {
 .sidebar .active {
   font-weight: 700;
 }
+
+.default__check[type="checkbox"] {
+  display: none;
+
+  ~ .custom__check {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    border: 2px solid #e0e0e0;
+    background: #fff;
+
+    position: relative;
+    transition: all 0.4s ease;
+    cursor: pointer;
+
+    &:after {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      transition: all 0.4s ease;
+    }
+  }
+
+  &:not(.switchbox) {
+    ~ .custom__check {
+      justify-content: center;
+      width: 24px;
+
+      &:after {
+        visibility: hidden;
+      }
+    }
+  }
+
+  &:disabled {
+    ~ .custom__check {
+      background-color: #e0e0e0 !important;
+      border: #e0e0e0 !important;
+      opacity: 1;
+      cursor: not-allowed;
+
+      &:after {
+        border-bottom: 3px solid #979797 !important;
+        border-right: 3px solid #979797 !important;
+      }
+    }
+  }
+
+  &:checked {
+    ~ .custom__check {
+      background-color: #2563eb;
+      border: #2563eb;
+
+      &:after {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.default__check[type="checkbox"] {
+  &:not(.switchbox) {
+    ~ .custom__check {
+      border-radius: 4px;
+      &:after {
+        height: 14px;
+        width: 7px;
+        margin-top: -2px;
+        border-bottom: 3px solid #fff;
+        border-right: 3px solid #fff;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

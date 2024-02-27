@@ -11,6 +11,7 @@ import {
   faCaretUp,
   faChevronLeft,
   faChevronRight,
+  faCircleExclamation,
   faSort,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -115,9 +116,11 @@ export default function MakeTable({
         <>
           <div className="">
             <div
-              className={` relative ${
-                !noOverflow ? "overflow-x-auto" : ""
-              } rounded-[10px] border-[2px] border-border`}
+              className={cn(
+                !noOverflow && "overflow-x-auto",
+                page.length === 0 && "!rounded-t-[10px] !rounded-b-[0px]",
+                "relative border-[2px] border-border rounded-[10px]"
+              )}
             >
               <table
                 {...getTableProps()}
@@ -132,9 +135,10 @@ export default function MakeTable({
                   {headerGroups.map((headerGroup) => (
                     <tr
                       {...headerGroup.getHeaderGroupProps()}
-                      className={`${
-                        noOverflow ? "rounded-t-[10px]  w-full bg-gray-200" : ""
-                      } border-b-[2px] border-border`}
+                      className={cn(
+                        noOverflow && "rounded-t-[10px]  w-full bg-gray-200",
+                        "border-border"
+                      )}
                     >
                       {headerGroup.headers.map((column, index) => (
                         <th
@@ -202,6 +206,17 @@ export default function MakeTable({
               </table>
             </div>
           </div>
+          {page.length === 0 && (
+            <div className="border rounded-b-[10px] border-t-0 border-border bg-white py-6">
+              <div className="flex space-x-3 justify-center items-center">
+                <FontAwesomeIcon
+                  icon={faCircleExclamation}
+                  className="text-primary text-[36px]"
+                />
+                <p className="p2 text-gray-500">There is no data to show.</p>
+              </div>
+            </div>
+          )}
           {pageOptions?.length > 1 && !noPagination && (
             <div className="flex mt-8 justify-center mb-12">
               <button
