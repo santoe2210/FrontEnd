@@ -1,6 +1,15 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+import { config } from "@fortawesome/fontawesome-svg-core";
+import MainLayout from "@/components/Layout/MainLayout";
+import Navbar from "@/components/Layout/Navbar";
+import Sidebar from "@/components/Layout/Sidebar";
+import Footer from "@/components/Layout/Footer";
+import { Toaster } from "@/components/ui/toaster";
+config.autoAddCss = false;
 
 const roboto = Roboto({
   weight: ["400", "500", "700", "900"],
@@ -18,12 +27,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={cn(
-          "min-h-screen bg-background antialiased font-sans",
-          roboto.variable
-        )}
+        className={cn("bg-gray-200 antialiased font-sans", roboto.variable)}
       >
-        {children}
+        <Navbar />
+        <Sidebar />
+        <MainLayout>{children}</MainLayout>
+        {/* <Footer /> */}
+        <Toaster />
       </body>
     </html>
   );

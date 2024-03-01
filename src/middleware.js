@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { routePaths } from "./app/utils/common";
 
 const PUBLIC_FILE = /\.(.*)$/;
 
 export async function middleware(req) {
+  const paths = routePaths();
+
   if (
     req.nextUrl.pathname.startsWith("/_next") ||
     req.nextUrl.pathname.includes("/api/") ||
@@ -11,10 +14,7 @@ export async function middleware(req) {
     return;
   }
 
-  if (
-    req.nextUrl.pathname === "/login" ||
-    req.nextUrl.pathname === "/register"
-  ) {
+  if (paths.includes(req.nextUrl.pathname)) {
     return NextResponse.next();
   }
 

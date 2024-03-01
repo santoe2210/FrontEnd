@@ -33,7 +33,12 @@ function Index() {
 
     await setToken(values.username);
 
-    router.push("/");
+    const routes = {
+      MMR: "/marketing-manager",
+      Admin: "/admin",
+    };
+
+    router.push(routes[values.username]);
 
     setApiLoading(false);
   }
@@ -54,7 +59,10 @@ function Index() {
           type="password"
           placeholder="xxxx"
         />
-        <Button disabled={apiLoading} type="submit" className="w-full mt-8">
+        <Link href="/forgot-password" className="text-info block mt-2">
+          <span className=" text-sm">Forgot your password?</span>
+        </Link>
+        <Button disabled={apiLoading} type="submit" className="w-full mt-2">
           {apiLoading ? "Please wait" : "Login"}
         </Button>
         <p className="text-center text-sm mt-4">

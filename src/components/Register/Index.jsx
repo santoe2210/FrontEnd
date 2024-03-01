@@ -89,7 +89,8 @@ function Index() {
   });
 
   async function handleLogin(values) {
-    console.log(values);
+    console.log(values, "testing");
+    router.push("/register-completed");
   }
 
   // function render icon check validate password
