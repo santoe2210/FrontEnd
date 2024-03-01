@@ -59,21 +59,15 @@ function ClosureDateTable() {
   const data = useMemo(() => DATA || [], []);
 
   const CellDate = (tableProps, x) => {
-    let component;
-    if (x === "closureDate") {
-      component = useMemo(
-        () => moment(tableProps.row.original.closureDate).format("DD MMM YYYY"),
-        [tableProps]
-      );
-    } else if (x === "finalClosureDate") {
-      component = useMemo(
-        () =>
-          moment(tableProps.row.original.finalClosureDate).format(
-            "DD MMM YYYY"
-          ),
-        [tableProps]
-      );
-    }
+    const component = useMemo(
+      () =>
+        moment(
+          x === "closureDate"
+            ? tableProps.row.original.closureDate
+            : tableProps.row.original.finalClosureDate
+        ).format("DD MMM YYYY HH:mm"),
+      [tableProps]
+    );
 
     return component;
   };

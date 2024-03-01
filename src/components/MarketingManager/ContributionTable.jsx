@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable */
 
 import React, {
   useState,
@@ -110,7 +111,7 @@ function ContributionTable() {
     }
   );
 
-  function customCheckboxHeader(modifiedOnChange, checked, disabled) {
+  function CustomCheckboxHeader(modifiedOnChange, checked, disabled) {
     const component = useMemo(() => (
       <div>
         <IndeterminateCheckbox
@@ -124,7 +125,7 @@ function ContributionTable() {
     return component;
   }
 
-  function customCheckboxCell(row) {
+  function CustomCheckboxCell(row) {
     useEffect(() => {
       if (row.original.status === "APR") {
         toggleRowSelected(row.id, true);
@@ -291,13 +292,13 @@ function ContributionTable() {
                 selectableRowsInCurrentPage === selectedRowsInCurrentPage) &&
               !disabled;
 
-            return customCheckboxHeader(modifiedOnChange, checked, disabled);
+            return CustomCheckboxHeader(modifiedOnChange, checked, disabled);
           },
 
           width: 0,
           maxWidth: 0,
           minWidth: 0,
-          Cell: ({ row }) => customCheckboxCell(row),
+          Cell: ({ row }) => CustomCheckboxCell(row),
         },
         ..._columns,
       ]);

@@ -132,13 +132,14 @@ export default function MakeTable({
                     !noOverflow ? "bg-gray-200" : ""
                   } h-[60px]`}
                 >
-                  {headerGroups.map((headerGroup) => (
+                  {headerGroups.map((headerGroup, index) => (
                     <tr
                       {...headerGroup.getHeaderGroupProps()}
                       className={cn(
                         noOverflow && "rounded-t-[10px]  w-full bg-gray-200",
                         "border-border"
                       )}
+                      key={index}
                     >
                       {headerGroup.headers.map((column, index) => (
                         <th
@@ -152,6 +153,7 @@ export default function MakeTable({
                             whiteSpace: "nowrap",
                             ...column.style,
                           }}
+                          key={index}
                           scope="col"
                           className={cn(
                             column.canSort ? "cursor-pointer" : "",
@@ -181,8 +183,9 @@ export default function MakeTable({
                             : "border-b-[2px] ",
                           "bg-white"
                         )}
+                        key={i}
                       >
-                        {row.cells.map((cell) => (
+                        {row.cells.map((cell, index) => (
                           <td
                             {...cell.getCellProps()}
                             style={{
@@ -195,6 +198,7 @@ export default function MakeTable({
                               i === page.length - 1 ? "rounded-b-0" : "",
                               "px-6 py-4 text-gray-500 whitespace-nowrap p3"
                             )}
+                            key={index}
                           >
                             {cell.render("Cell")}
                           </td>
