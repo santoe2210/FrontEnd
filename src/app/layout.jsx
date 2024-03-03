@@ -9,6 +9,7 @@ import Navbar from "@/components/Layout/Navbar";
 import Sidebar from "@/components/Layout/Sidebar";
 import Footer from "@/components/Layout/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import ProgressProvider from "@/components/Layout/ProgressProvider";
 config.autoAddCss = false;
 
 const roboto = Roboto({
@@ -29,11 +30,13 @@ export default function RootLayout({ children }) {
       <body
         className={cn("bg-gray-200 antialiased font-sans", roboto.variable)}
       >
-        <Navbar />
-        <Sidebar />
-        <MainLayout>{children}</MainLayout>
-        {/* <Footer /> */}
-        <Toaster />
+        <ProgressProvider>
+          <Navbar />
+          <Sidebar />
+          <MainLayout>{children}</MainLayout>
+          {/* <Footer /> */}
+          <Toaster />
+        </ProgressProvider>
       </body>
     </html>
   );

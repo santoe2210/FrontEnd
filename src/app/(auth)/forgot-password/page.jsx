@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
   return (
     <div className="max-w-[600px] mx-auto">
       <h3 className="text-primary font-bold">Forgot Your Password?</h3>
-      <p>
+      <p className="p3">
         Enter the email address associated with your account and we’ll send you
         a link to reset your password.
       </p>
