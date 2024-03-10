@@ -12,33 +12,12 @@ import SelectField from "../SelectField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import CheckField from "../CheckField";
+import { callService } from "@/app/utils/callService";
+import { faultyTypes, userRoles } from "@/app/utils/constant";
 
 function Index() {
   const [apiLoading, setApiLoading] = useState(false);
   const router = useRouter();
-
-  const faultys = [
-    {
-      id: 0,
-      name: "Faulty of Engineering",
-      value: "FOE",
-    },
-    {
-      id: 1,
-      name: "Faulty of Science",
-      value: "FOS",
-    },
-    {
-      id: 2,
-      name: "Faulty of Art",
-      value: "FOA",
-    },
-    {
-      id: 3,
-      name: "Faulty of Medicine",
-      value: "FOM",
-    },
-  ];
 
   const formSchema = z
     .object({
@@ -46,6 +25,7 @@ function Index() {
         .string()
         .trim()
         .min(1, { message: "This field is required." }),
+      role: z.string().trim().min(1, { message: "This field is required." }),
       email: z
         .string()
         .min(1, { message: "This field is required" })
@@ -82,6 +62,7 @@ function Index() {
       username: "",
       email: "",
       password: "",
+      role: "",
       confirmpassword: "",
       facultyType: "",
       accept: false,
@@ -91,6 +72,13 @@ function Index() {
   async function handleLogin(values) {
     console.log(values, "testing");
     router.push("/register-completed");
+    // const response = await callService(
+    //   "POST",
+    //   "https://api.sinwattana.com/pro/authservice/api/key/",
+    //   values,
+    //   { token: "11212" }
+    // );
+    // console.log(response);
   }
 
   // function render icon check validate password
@@ -152,10 +140,16 @@ function Index() {
           placeholder="abc@gmail.com"
         />
         <SelectField
+          label="Role"
+          name="role"
+          form={form}
+          data={userRoles.slice(0, 2)}
+        />
+        <SelectField
           label="Faculty Type"
           name="facultyType"
           form={form}
-          data={faultys}
+          data={faultyTypes}
         />
         <InputField
           label="Password"

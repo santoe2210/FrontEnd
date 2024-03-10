@@ -65,6 +65,7 @@ const SetClosureDatePage = () => {
     if (!isValidClosureDate(data)) {
       toast({
         title: "Error Setting Academic Closure Dates",
+        variant: "destructive",
         description:
           "Closure date cannot be greater than final closure date and both dates' years must be greater than or equal to academic year.",
         action: <ToastAction altText="OK">OK</ToastAction>,
@@ -73,6 +74,7 @@ const SetClosureDatePage = () => {
     }
 
     toast({
+      variant: "success",
       description: "Successfully set academic closure dates",
       action: <ToastAction altText="OK">OK</ToastAction>,
     });

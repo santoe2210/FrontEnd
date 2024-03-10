@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function callService(url, method, data, headers) {
+export async function callService(method, url, data, headers) {
   // Set the options
   const options = {
     method: method,

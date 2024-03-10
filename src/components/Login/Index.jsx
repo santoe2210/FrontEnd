@@ -47,7 +47,7 @@ function Index() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleLogin)}>
         <InputField
-          label="Username"
+          label="Email"
           name="username"
           form={form}
           placeholder="Admin"
