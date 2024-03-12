@@ -1,30 +1,44 @@
 "use client";
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Line,
+} from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
-export function Chart({ title, dataArray, dataKeyX, dataKeyY }) {
+export function Chart({ title, dataArray, dataKeyX, dataKeyY, year }) {
+  const CustomLegend = () => {
+    return (
+      <div className="text-center">
+        <p className="p3 font-bold">{year} Academic Year</p>
+      </div>
+    );
+  };
+
   return (
-    <Card className="col-span-4">
+    <Card className="">
       <CardHeader>
         <CardTitle>{title} Overview</CardTitle>
       </CardHeader>
-      <CardContent className="pl-2">
+      <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={dataArray}>
-            <XAxis
-              dataKey={dataKeyX}
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
+          <BarChart
+            data={dataArray}
+            margin={{
+              left: -30,
+            }}
+          >
+            <XAxis dataKey={dataKeyX} stroke="#888888" fontSize={12} />
+            <YAxis stroke="#888888" fontSize={12} />
+            <Tooltip />
+            <Legend content={<CustomLegend />} />
+
             <Bar
               dataKey={dataKeyY}
               fill="currentColor"

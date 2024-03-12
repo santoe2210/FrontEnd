@@ -27,9 +27,17 @@ export default async function Sidebar() {
     },
   ];
 
+  const menusMCR = [
+    { id: 0, name: "Dashboard", link: "/marketing-coordinator" },
+    { id: 1, name: "Articles", link: "/marketing-coordinator/articles" },
+  ];
+
   const getMenus = () => {
     if (token === "Admin") {
       return menusAdmin;
+    }
+    if (token === "MCR") {
+      return menusMCR;
     }
     return menusMMR;
   };

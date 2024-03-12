@@ -1,7 +1,7 @@
-import React from "react";
 import AdminDashboard from "@/components/Dashboard/AdminDashboard";
+import React from "react";
 
-function MarketingManager() {
+function MarketingCoordinator() {
   return (
     <div>
       <AdminDashboard />
@@ -9,4 +9,4 @@ function MarketingManager() {
   );
 }
 
-export default MarketingManager;
+export default MarketingCoordinator;

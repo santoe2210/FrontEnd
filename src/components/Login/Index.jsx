@@ -36,6 +36,7 @@ function Index() {
     const routes = {
       MMR: "/marketing-manager",
       Admin: "/admin",
+      MCR: "/marketing-coordinator",
     };
 
     router.push(routes[values.username]);

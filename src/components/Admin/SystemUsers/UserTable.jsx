@@ -256,7 +256,7 @@ function UserTable() {
           </Button>
         </form>
         <div className="flex justify-end">
-          <Link href="/admin/closure-date/set-closure-date">
+          <Link href="/admin/system-users/add-user">
             <Button>Add User</Button>
           </Link>
         </div>
