@@ -448,7 +448,7 @@ function ArticleTable() {
         <div className="mt-2">
           <p className="text-gray-500 p3">
             Are you sure you want to{" "}
-            {publshData.state ? "publish" : "unpublish"} this fundchat on the
+            {publshData.state ? "publish" : "unpublish"} this article on the
             website? <br />
             To confirm, please click the button below.
           </p>
