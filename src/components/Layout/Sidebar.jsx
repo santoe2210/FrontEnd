@@ -31,6 +31,10 @@ export default async function Sidebar() {
     { id: 0, name: "Dashboard", link: "/marketing-coordinator" },
     { id: 1, name: "Articles", link: "/marketing-coordinator/articles" },
   ];
+  const menusGuest = [
+    { id: 0, name: "Dashboard", link: "/guest" },
+    { id: 1, name: "Articles", link: "/guest/articles" },
+  ];
 
   const getMenus = () => {
     if (token === "Admin") {
@@ -38,6 +42,9 @@ export default async function Sidebar() {
     }
     if (token === "MCR") {
       return menusMCR;
+    }
+    if (token === "Guest") {
+      return menusGuest;
     }
     return menusMMR;
   };
