@@ -40,45 +40,45 @@ const dateData = [
   },
 ];
 const contributionData = [
-  { id: 1, academicYear: "2022", faculty: "Medicine" },
-  { id: 2, academicYear: "2022", faculty: "Engineering" },
-  { id: 3, academicYear: "2022", faculty: "CS" },
-  { id: 4, academicYear: "2022", faculty: "BS" },
-  { id: 5, academicYear: "2022", faculty: "Electronics" },
-  { id: 6, academicYear: "2022", faculty: "Computing" },
-  { id: 7, academicYear: "2022", faculty: "Medicine" },
-  { id: 8, academicYear: "2023", faculty: "Engineering" },
-  { id: 9, academicYear: "2024", faculty: "CS" },
-  { id: 10, academicYear: "2025", faculty: "BS" },
-  { id: 11, academicYear: "2022", faculty: "Electronics" },
-  { id: 12, academicYear: "2023", faculty: "Computing" },
-  { id: 13, academicYear: "2022", faculty: "Medicine" },
-  { id: 14, academicYear: "2023", faculty: "Engineering" },
-  { id: 15, academicYear: "2024", faculty: "CS" },
-  { id: 16, academicYear: "2025", faculty: "BS" },
-  { id: 17, academicYear: "2022", faculty: "Electronics" },
-  { id: 18, academicYear: "2023", faculty: "Computing" },
-  { id: 1, academicYear: "2023", faculty: "Medicine" },
-  { id: 2, academicYear: "2023", faculty: "Engineering" },
-  { id: 3, academicYear: "2023", faculty: "CS" },
-  { id: 4, academicYear: "2023", faculty: "BS" },
-  { id: 5, academicYear: "2023", faculty: "Electronics" },
-  { id: 6, academicYear: "2023", faculty: "Computing" },
-  { id: 7, academicYear: "2023", faculty: "Medicine" },
-  { id: 1, academicYear: "2024", faculty: "Medicine" },
-  { id: 2, academicYear: "2024", faculty: "Engineering" },
-  { id: 3, academicYear: "2024", faculty: "CS" },
-  { id: 4, academicYear: "2024", faculty: "BS" },
-  { id: 5, academicYear: "2024", faculty: "Electronics" },
-  { id: 6, academicYear: "2024", faculty: "Computing" },
-  { id: 7, academicYear: "2024", faculty: "Medicine" },
-  { id: 1, academicYear: "2025", faculty: "Medicine" },
-  { id: 2, academicYear: "2025", faculty: "Engineering" },
-  { id: 3, academicYear: "2025", faculty: "CS" },
-  { id: 4, academicYear: "2025", faculty: "BS" },
-  { id: 5, academicYear: "2025", faculty: "Electronics" },
-  { id: 6, academicYear: "2025", faculty: "Computing" },
-  { id: 7, academicYear: "2025", faculty: "Medicine" },
+  { id: 1, academicYear: "2022", user: "pmk", faculty: "Medicine" },
+  { id: 2, academicYear: "2022", user: "sss", faculty: "Engineering" },
+  { id: 3, academicYear: "2022", user: "sss", faculty: "CS" },
+  { id: 4, academicYear: "2022", user: "sss", faculty: "BS" },
+  { id: 5, academicYear: "2022", user: "pmk", faculty: "Electronics" },
+  { id: 6, academicYear: "2022", user: "pmk", faculty: "Computing" },
+  { id: 7, academicYear: "2022", user: "lkk", faculty: "Medicine" },
+  { id: 8, academicYear: "2023", user: "pmk", faculty: "Engineering" },
+  { id: 9, academicYear: "2024", user: "pmk", faculty: "CS" },
+  { id: 10, academicYear: "2025", user: "pmk", faculty: "BS" },
+  { id: 11, academicYear: "2022", user: "lkk", faculty: "Electronics" },
+  { id: 12, academicYear: "2023", user: "sss", faculty: "Computing" },
+  { id: 13, academicYear: "2022", user: "sss", faculty: "Medicine" },
+  { id: 14, academicYear: "2023", user: "sss", faculty: "Engineering" },
+  { id: 15, academicYear: "2024", user: "pmk", faculty: "CS" },
+  { id: 16, academicYear: "2025", user: "pmk", faculty: "BS" },
+  { id: 17, academicYear: "2022", user: "sss", faculty: "Electronics" },
+  { id: 18, academicYear: "2023", user: "sss", faculty: "Computing" },
+  { id: 1, academicYear: "2023", user: "pmk", faculty: "Medicine" },
+  { id: 2, academicYear: "2023", user: "pmk", faculty: "Engineering" },
+  { id: 3, academicYear: "2023", user: "kkk", faculty: "CS" },
+  { id: 4, academicYear: "2023", user: "kkk", faculty: "BS" },
+  { id: 5, academicYear: "2023", user: "kkk", faculty: "Electronics" },
+  { id: 6, academicYear: "2023", user: "pmk", faculty: "Computing" },
+  { id: 7, academicYear: "2023", user: "pmk", faculty: "Medicine" },
+  { id: 1, academicYear: "2024", user: "pmk", faculty: "Medicine" },
+  { id: 2, academicYear: "2024", user: "pmk", faculty: "Engineering" },
+  { id: 3, academicYear: "2024", user: "kyaw", faculty: "CS" },
+  { id: 4, academicYear: "2024", user: "kyaw", faculty: "BS" },
+  { id: 5, academicYear: "2024", user: "kyaw", faculty: "Electronics" },
+  { id: 6, academicYear: "2024", user: "pmk", faculty: "Computing" },
+  { id: 7, academicYear: "2024", user: "ttt", faculty: "Medicine" },
+  { id: 1, academicYear: "2025", user: "aaa", faculty: "Medicine" },
+  { id: 2, academicYear: "2025", user: "aaa", faculty: "Engineering" },
+  { id: 3, academicYear: "2025", user: "aaa", faculty: "CS" },
+  { id: 4, academicYear: "2025", user: "aaa", faculty: "BS" },
+  { id: 5, academicYear: "2025", user: "bbb", faculty: "Electronics" },
+  { id: 6, academicYear: "2025", user: "bbb", faculty: "Computing" },
+  { id: 7, academicYear: "2025", user: "ccc", faculty: "Medicine" },
 ];
 
 const contributorData = [
@@ -135,12 +135,16 @@ const AdminDashboard = () => {
     (x) => x.academicYear === year
   );
 
-  //unique faculties with count
+  //unique faculties with count and contributor count
   const uniqueFaculties = Array.from(
     new Set(contributionData.map((x) => x.faculty))
   );
 
-  const newData = uniqueFaculties.map((faculty) => ({ faculty, total: 0 }));
+  const newData = uniqueFaculties.map((faculty) => ({
+    faculty,
+    total: 0,
+    totalContributor: new Set(),
+  }));
 
   //unique faculties with count contributor
   const uniqueFacultiesContributors = Array.from(
@@ -152,24 +156,31 @@ const AdminDashboard = () => {
     total: 0,
   }));
 
-  //add count
+  //add count and contributor count
   yearlyContributions.forEach((contribution) => {
     const index = newData.findIndex(
       (entry) => entry.faculty === contribution.faculty
     );
+
     if (index !== -1) {
       newData[index].total++;
+      newData[index].totalContributor.add(contribution.user);
     }
+  });
+  newData.forEach((entry) => {
+    entry.totalContributor = Array.from(entry.totalContributor).length;
   });
 
-  yearlyContributors.forEach((contribution) => {
-    const index = newDataContributor.findIndex(
-      (entry) => entry.faculty === contribution.faculty
-    );
-    if (index !== -1) {
-      newDataContributor[index].total++;
-    }
-  });
+  console.log(newData);
+
+  // yearlyContributors.forEach((contribution) => {
+  //   const index = newDataContributor.findIndex(
+  //     (entry) => entry.faculty === contribution.faculty
+  //   );
+  //   if (index !== -1) {
+  //     newDataContributor[index].total++;
+  //   }
+  // });
 
   // Filter data based on the selected academic year
   const filteredData = contributionData.filter(
@@ -261,9 +272,9 @@ const AdminDashboard = () => {
         />
         <Chart
           title="Contributors"
-          dataArray={newDataContributor}
+          dataArray={newData}
           dataKeyX="faculty"
-          dataKeyY="total"
+          dataKeyY="totalContributor"
           year={year}
         />
         {/* <ClosureDateCard
