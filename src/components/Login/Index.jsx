@@ -37,7 +37,8 @@ function Index() {
       MMR: "/marketing-manager",
       Admin: "/admin",
       MCR: "/marketing-coordinator",
-      Guest:"/guest"
+      Guest:"/guest",
+      Student:"/student/articles"
     };
 
     router.push(routes[values.username]);

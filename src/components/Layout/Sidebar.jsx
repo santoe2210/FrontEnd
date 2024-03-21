@@ -35,6 +35,10 @@ export default async function Sidebar() {
     { id: 0, name: "Dashboard", link: "/guest" },
     { id: 1, name: "Articles", link: "/guest/articles" },
   ];
+  const menusStudent = [
+    { id: 0, name: "Articles", link: "/student/articles" },
+    
+  ];
 
   const getMenus = () => {
     if (token === "Admin") {
@@ -45,6 +49,9 @@ export default async function Sidebar() {
     }
     if (token === "Guest") {
       return menusGuest;
+    }
+    if (token === "Student") {
+      return menusStudent;
     }
     return menusMMR;
   };
