@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import InputField from "@/components/InputField";
 import { Form } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import callService from "@/app/utils/callService";
 
 const formSchema = z.object({
   email: z
@@ -17,13 +18,23 @@ const formSchema = z.object({
 });
 
 const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
   const [apiLoading, setApiLoading] = useState(false);
   const router = useRouter();
 
   const handleEmailSubmit = async (values) => {
-    console.log(values.email);
-    router.push(`/reset-password/${values.email}`);
+    setApiLoading(true);
+    const response = await callService(
+      "POST",
+      `${process.env.API_URL}/forgotPassword`,
+      {
+        email: values.email,
+      },
+      null
+    );
+    if (response.status === 201) {
+      router.push("/forgot-password-completed/");
+    }
+    setApiLoading(false);
   };
 
   const form = useForm({

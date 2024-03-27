@@ -7,10 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import InputField from "@/components/InputField";
 import { Form } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import callService from "@/app/utils/callService";
 
 const formSchema = z
   .object({
@@ -70,9 +71,21 @@ function ResetPasswordPage() {
   const [apiLoading, setApiLoading] = useState(false);
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+  const searchtk = searchParams.get("token");
+  const searchid = searchParams.get("id");
+
   const handlePasswordSubmit = async (values) => {
-    console.log(values.password);
-    router.push("/login");
+    const response = await callService(
+      "POST",
+      `${process.env.API_URL}/user/${searchid}/forgot-password/${searchtk}`,
+      { password: values.password },
+      null
+    );
+    console.log(response);
+    if (response.status === 201) {
+      router.push("/login");
+    }
   };
 
   const form = useForm({

@@ -3,8 +3,24 @@ import { cn } from "@/lib/utils";
 import NavLink from "./NavLink";
 import { getToken } from "@/app/utils/cookie";
 
+async function getProfileData(userToken) {
+  const res = await fetch(`${process.env.API_URL}/profile/me`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
 export default async function Sidebar() {
   const token = await getToken();
+  const profile = token && (await getProfileData(token));
 
   const menus = [
     { id: 0, name: "Dashboard", link: "/" },
@@ -35,22 +51,19 @@ export default async function Sidebar() {
     { id: 0, name: "Dashboard", link: "/guest" },
     { id: 1, name: "Articles", link: "/guest/articles" },
   ];
-  const menusStudent = [
-    { id: 0, name: "Articles", link: "/student/articles" },
-    
-  ];
+  const menusStudent = [{ id: 0, name: "Articles", link: "/student/articles" }];
 
   const getMenus = () => {
-    if (token === "Admin") {
+    if (profile?.data?.role === "admin") {
       return menusAdmin;
     }
-    if (token === "MCR") {
+    if (profile?.data?.role === "mcr") {
       return menusMCR;
     }
-    if (token === "Guest") {
+    if (profile?.data?.role === "guest") {
       return menusGuest;
     }
-    if (token === "Student") {
+    if (profile?.data?.role === "student") {
       return menusStudent;
     }
     return menusMMR;

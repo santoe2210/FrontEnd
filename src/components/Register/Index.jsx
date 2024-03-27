@@ -12,11 +12,12 @@ import SelectField from "../SelectField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import CheckField from "../CheckField";
-import { callService } from "@/app/utils/callService";
+import callService from "@/app/utils/callService";
 import { faultyTypes, userRoles } from "@/app/utils/constant";
 
 function Index() {
   const [apiLoading, setApiLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
 
   const formSchema = z
@@ -70,15 +71,30 @@ function Index() {
   });
 
   async function handleLogin(values) {
-    console.log(values, "testing");
-    router.push("/register-completed");
-    // const response = await callService(
-    //   "POST",
-    //   "https://api.sinwattana.com/pro/authservice/api/key/",
-    //   values,
-    //   { token: "11212" }
-    // );
-    // console.log(response);
+    setApiLoading(true);
+    const jsonData = {
+      name: values.username,
+      email: values.email,
+      role: values.role.toLowerCase(),
+      password: values.password,
+      faculty: "66028274c8ecd2b903bc0b6c",
+      academicYear: "66027b482ddaf15b5e8afb56",
+      termsAgreed: true,
+    };
+
+    const response = await callService(
+      "POST",
+      `${process.env.API_URL}/register/`,
+      jsonData,
+      null
+    );
+
+    if (response.status === 201) {
+      router.push("/register-completed");
+    } else if (response.status === 400) {
+      setErrMsg("Email is already registered.");
+    }
+    setApiLoading(false);
   }
 
   // function render icon check validate password
@@ -215,6 +231,9 @@ function Index() {
         <Button disabled={apiLoading} type="submit" className="w-full mt-8">
           {apiLoading ? "Please wait" : "Register"}
         </Button>
+        <p className="text-center text-[12px] text-negative mt-2">
+          {errMsg && errMsg}
+        </p>
         <p className="text-center p3 mt-4">
           Already have an account?{" "}
           <Link href="/login" className="text-info">

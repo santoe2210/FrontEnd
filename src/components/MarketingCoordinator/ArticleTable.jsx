@@ -7,6 +7,14 @@ import React, {
   useRef,
   useEffect,
 } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import {
   useTable,
@@ -36,6 +44,7 @@ function ArticleTable() {
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [oriData, setOriData] = useState([]);
+  const [dropdownFilter, setDropdownFilter] = useState("All");
 
   const [modalVerify, setModalVerify] = useState(false);
   const [publshData, setPublishData] = useState({
@@ -298,6 +307,7 @@ function ArticleTable() {
     setGlobalFilter,
     previousPage,
     setPageSize,
+    setFilter,
 
     state: { pageIndex },
   } = useTable(
@@ -339,6 +349,37 @@ function ArticleTable() {
     setPageSize,
     pageIndex,
   };
+
+  const handleFilterDropdown = useCallback((value) => {
+    if (value === "All") {
+      setFilter("comment", undefined);
+      setDropdownFilter("All");
+    } else if (value === "Without Comment") {
+      // setFilter("comment", (rows) => {
+      //   return rows.filter((row) => {
+      //     const commentValue = row.values.comment;
+      //     return (
+      //       commentValue === "" ||
+      //       commentValue === null ||
+      //       /^\s*$/.test(commentValue)
+      //     );
+      //   });
+      // });
+      setDropdownFilter("Without Comment");
+    } else if (value === "Without Comment 14 Days") {
+      const cutoffDate = new Date(); // Get today's date
+      cutoffDate.setDate(cutoffDate.getDate() - 14); // Subtract 14 days
+      setFilter("comment", (rows = []) => {
+        return rows.filter((row) => {
+          // Filter rows with comment older than 14 days or empty comment
+          return (
+            !row.values.comment || new Date(row.values.comment) <= cutoffDate
+          );
+        });
+      });
+      setDropdownFilter("Without Comment 14 Days");
+    }
+  }, []);
 
   const handleOnSubmitInput = (e) => {
     e.preventDefault();
@@ -432,6 +473,25 @@ function ArticleTable() {
             Search
           </Button>
         </form>
+        <div>
+          <p className="p3 font-bold mb-1">Comments</p>
+          <Select value={dropdownFilter} onValueChange={handleFilterDropdown}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {["All", "Without Comment", "Without Comment 14 Days"].map(
+                  (item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  )
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <MakeTable loading={loading} propsToTable={propsToTable} />
       {/* publish modal */}

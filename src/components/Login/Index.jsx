@@ -10,9 +10,11 @@ import InputField from "../InputField";
 import { Form } from "../ui/form";
 import { useRouter } from "next/navigation";
 import { setToken } from "@/app/utils/cookie";
+import callService from "@/app/utils/callService";
 
 function Index() {
   const [apiLoading, setApiLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
 
   const formSchema = z.object({
@@ -30,18 +32,26 @@ function Index() {
 
   async function handleLogin(values) {
     setApiLoading(true);
+    const response = await callService("POST", `${process.env.API_URL}/login`, {
+      email: values.username,
+      password: values.password,
+    });
 
-    await setToken(values.username);
-
-    const routes = {
-      MMR: "/marketing-manager",
-      Admin: "/admin",
-      MCR: "/marketing-coordinator",
-      Guest:"/guest",
-      Student:"/student/articles"
-    };
-
-    router.push(routes[values.username]);
+    if (response.status === 201) {
+      await setToken(response.data.token);
+      const routes = {
+        MMR: "/marketing-manager",
+        admin: "/admin",
+        MCR: "/marketing-coordinator",
+        Guest: "/guest",
+        student: "/student/articles",
+      };
+      router.push(routes[response.data.student.role]);
+    } else if (response.status === 400) {
+      setErrMsg("Email and password are incorrect.");
+    } else {
+      setErrMsg("The email is not registered yet.");
+    }
 
     setApiLoading(false);
   }
@@ -68,6 +78,9 @@ function Index() {
         <Button disabled={apiLoading} type="submit" className="w-full mt-2">
           {apiLoading ? "Please wait" : "Login"}
         </Button>
+        <p className="text-center text-[12px] text-negative mt-2">
+          {errMsg && errMsg}
+        </p>
         <p className="text-center text-sm mt-4">
           Don't have an account?{" "}
           <Link href="/register" className="text-info">
