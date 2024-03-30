@@ -44,7 +44,7 @@ function ClosureDateTable({ oriData, academicyearLists }) {
           x === "closureDate"
             ? tableProps.row.original.closureDate
             : tableProps.row.original.finalClosureDate
-        ).format("DD MMM YYYY HH:mm"),
+        ).format("DD MMM YYYY"),
       [tableProps]
     );
 
@@ -116,6 +116,12 @@ function ClosureDateTable({ oriData, academicyearLists }) {
       defaultColumn,
       globalFilter: ourGlobalFilterFunction,
       initialState: {
+        sortBy: [
+          {
+            id: "date",
+            desc: true,
+          },
+        ],
         pageSize: 10,
       },
     },

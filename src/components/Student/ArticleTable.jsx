@@ -20,6 +20,8 @@ import MakeTable from "../MakeTable";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const DATA = [
   {
@@ -157,13 +159,16 @@ const CellDate = (tableProps) => {
 };
 const CellStatus = (tableProps) => {
   const status = tableProps.row.original.status;
+  const listStatus = {
+    approved: "text-positive",
+    pending: "text-warning",
+    draft: "text-disable",
+  };
 
   const component = useMemo(
     () => (
       <div>
-        <Badge variant={status !== "approved" && "destructive"}>
-          {status}{" "}
-        </Badge>
+        <p className={listStatus[status]}>{status}</p>
       </div>
     ),
     [tableProps]
@@ -171,6 +176,24 @@ const CellStatus = (tableProps) => {
 
   return component;
 };
+const CellInfo = (tableProps) => {
+  const component = useMemo(
+    () => (
+      <div className="flex space-x-5">
+        <Link href="/" passHref>
+          <FontAwesomeIcon icon={faEye} />
+        </Link>
+        <Link href="/" passHref>
+          <FontAwesomeIcon icon={faEdit} />
+        </Link>
+      </div>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
 const CellArticle = (tableProps) => {
   const component = useMemo(
     () => (
@@ -209,13 +232,6 @@ const COLUMNS = [
     width: 124,
     maxWidth: 124,
   },
-  {
-    Header: "Type",
-    accessor: "articleType",
-    width: 90,
-    maxWidth: 90,
-    disableSortBy: true,
-  },
 
   {
     Header: "Article",
@@ -235,9 +251,17 @@ const COLUMNS = [
   {
     Header: "Status",
     accessor: "status",
-    width: 134,
-    maxWidth: 134,
+    width: 94,
+    maxWidth: 94,
     Cell: (tableProps) => CellStatus(tableProps),
+  },
+  {
+    Header: "",
+    disableSortBy: true,
+    accessor: "info",
+    width: 64,
+    maxWidth: 64,
+    Cell: (tableProps) => CellInfo(tableProps),
   },
 ];
 

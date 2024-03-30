@@ -36,22 +36,23 @@ const UplaodArticlePage = () => {
 
   const { toast } = useToast();
   const onSubmit = (values) => {
+    console.log(values);
     //POST
-    const error = new Error();
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: `Error submitting article!`,
-        action: <ToastAction altText="OK">OK</ToastAction>,
-      });
-    } else {
-      toast({
-        title: `Article submitted!`,
-        action: <ToastAction altText="OK">OK</ToastAction>,
-      });
-      console.log(values);
-      router.push("/student/articles");
-    }
+    // const error = new Error();
+    // if (error) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: `Error submitting article!`,
+    //     action: <ToastAction altText="OK">OK</ToastAction>,
+    //   });
+    // } else {
+    //   toast({
+    //     title: `Article submitted!`,
+    //     action: <ToastAction altText="OK">OK</ToastAction>,
+    //   });
+    //   console.log(values);
+    //   router.push("/student/articles");
+    // }
   };
 
   return (
@@ -88,8 +89,8 @@ const UplaodArticlePage = () => {
               label="Please accept the terms before uploading the article."
               className="mt-6"
             />
-            <Button className="mt-8" type="submit">
-              {isEditing ? "Update" : "Upload"}{" "}
+            <Button className="mt-8 w-full" type="submit">
+              {isEditing ? "Update" : "Submit"}{" "}
             </Button>
           </form>
         </Form>

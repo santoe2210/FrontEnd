@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import NavLink from "./NavLink";
 import { getToken } from "@/app/utils/cookie";
+import { useDataContext } from "@/app/context/ContextProvider";
 
 async function getProfileData(userToken) {
   const res = await fetch(`${process.env.API_URL}/profile/me`, {
@@ -11,8 +12,7 @@ async function getProfileData(userToken) {
   });
 
   if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    console.log("failed to fetch");
   }
 
   return res.json();
@@ -21,12 +21,6 @@ async function getProfileData(userToken) {
 export default async function Sidebar() {
   const token = await getToken();
   const profile = token && (await getProfileData(token));
-
-  const menus = [
-    { id: 0, name: "Dashboard", link: "/" },
-    { id: 1, name: "Test", link: "/test" },
-    { id: 2, name: "Option", link: "/option" },
-  ];
 
   const menusMMR = [
     { id: 0, name: "Dashboard", link: "/marketing-manager" },
@@ -81,7 +75,12 @@ export default async function Sidebar() {
         <div className="overflow-y-auto rounded h-[calc(100vh-115px)]">
           <ul>
             {getMenus().map((item) => (
-              <NavLink key={item.id} name={item.name} link={item.link} />
+              <NavLink
+                key={item.id}
+                name={item.name}
+                link={item.link}
+                profileData={profile}
+              />
             ))}
           </ul>
         </div>

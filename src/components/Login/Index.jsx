@@ -47,6 +47,7 @@ function Index() {
         student: "/student/articles",
       };
       router.push(routes[response.data.student.role]);
+      setApiLoading(false);
     } else if (response.status === 400) {
       setErrMsg("Email and password are incorrect.");
     } else {
