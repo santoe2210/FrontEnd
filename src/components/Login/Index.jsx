@@ -42,8 +42,8 @@ function Index() {
       const routes = {
         MMR: "/marketing-manager",
         admin: "/admin",
-        MCR: "/marketing-coordinator",
-        Guest: "/guest",
+        "marketing coordinator": "/marketing-coordinator",
+        guest: "/guest",
         student: "/student/articles",
       };
       router.push(routes[response.data.student.role]);

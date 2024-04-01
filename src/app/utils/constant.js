@@ -1,8 +1,8 @@
 const userRoles = [
-  { id: 0, name: "Student", value: "Student" },
-  { id: 1, name: "Guest", value: "Guest" },
-  { id: 2, name: "Marketing Coordinator", value: "Marketing Coordinator" },
-  { id: 3, name: "Marketing Manager", value: "Marketing Manager" },
+  { id: 0, name: "Student", value: "student" },
+  { id: 1, name: "Guest", value: "guest" },
+  { id: 2, name: "Marketing Coordinator", value: "marketing coordinator" },
+  { id: 3, name: "Marketing Manager", value: "marketing manager" },
 ];
 
 const faultyTypes = [

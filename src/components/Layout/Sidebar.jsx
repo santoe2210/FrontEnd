@@ -18,9 +18,33 @@ async function getProfileData(userToken) {
   return res.json();
 }
 
+async function getAllFaculty() {
+  const res = await fetch(`${process.env.API_URL}/faculty/getAllFaculty`, {});
+
+  if (!res.ok) {
+    console.log("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
+async function getAcademicYearLists() {
+  const res = await fetch(
+    `${process.env.API_URL}/academicYear/getAllacademicYear`
+  );
+
+  if (!res.ok) {
+    console.log("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
 export default async function Sidebar() {
   const token = await getToken();
   const profile = token && (await getProfileData(token));
+  const facultyTypes = await getAllFaculty();
+  const academicYerLists = await getAcademicYearLists();
 
   const menusMMR = [
     { id: 0, name: "Dashboard", link: "/marketing-manager" },
@@ -51,7 +75,7 @@ export default async function Sidebar() {
     if (profile?.data?.role === "admin") {
       return menusAdmin;
     }
-    if (profile?.data?.role === "mcr") {
+    if (profile?.data?.role === "marketing coordinator") {
       return menusMCR;
     }
     if (profile?.data?.role === "guest") {
@@ -80,6 +104,8 @@ export default async function Sidebar() {
                 name={item.name}
                 link={item.link}
                 profileData={profile}
+                facultyTypes={facultyTypes}
+                academicYerLists={academicYerLists}
               />
             ))}
           </ul>

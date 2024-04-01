@@ -13,6 +13,7 @@ import InputFieldCalendar from "@/components/InputFieldCalendar";
 import SelectField from "@/components/SelectField";
 import callService from "@/app/utils/callService";
 import { getYearNumberFromID, reformatListYear } from "@/app/utils/common";
+import { useDataContext } from "@/app/context/ContextProvider";
 
 const FormSchema = z.object({
   closureDate: z.date({
@@ -24,7 +25,8 @@ const FormSchema = z.object({
   academicYear: z.string().min(1, { message: "This field is reqiured." }),
 });
 
-function SetClouserDate({ year, userToken }) {
+function SetClouserDate({ userToken }) {
+  const { academicYearLists } = useDataContext();
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -42,8 +44,10 @@ function SetClouserDate({ year, userToken }) {
 
     // Check if the academic year is equal to the closure date year or the final closure date year
     if (
-      Number(getYearNumberFromID(year, academicYear)) !== closureYear ||
-      Number(getYearNumberFromID(year, academicYear)) !== finalClosureYear
+      Number(getYearNumberFromID(academicYearLists?.year, academicYear)) !==
+        closureYear ||
+      Number(getYearNumberFromID(academicYearLists?.year, academicYear)) !==
+        finalClosureYear
     ) {
       return false;
     }
@@ -100,7 +104,7 @@ function SetClouserDate({ year, userToken }) {
               label="Academic Year"
               name="academicYear"
               form={form}
-              data={reformatListYear(year)}
+              data={reformatListYear(academicYearLists?.year)}
             />
             <InputFieldCalendar
               form={form}

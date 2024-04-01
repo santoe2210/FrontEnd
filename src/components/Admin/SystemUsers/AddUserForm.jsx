@@ -1,87 +1,74 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import InputField from "../InputField";
-import { Form } from "../ui/form";
 import { useRouter } from "next/navigation";
-import SelectField from "../SelectField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import SelectField from "@/components/SelectField";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import CheckField from "../CheckField";
+import InputField from "@/components/InputField";
+import { userRoles } from "@/app/utils/constant";
+import { reformatListFaculty, reformatListYear } from "@/app/utils/common";
 import callService from "@/app/utils/callService";
 import { useDataContext } from "@/app/context/ContextProvider";
-import { reformatListFaculty, reformatListYear } from "@/app/utils/common";
 
-function Index() {
+const FormSchema = z.object({
+  role: z.string().min(1, { message: "Please select role." }),
+  academicYear: z.string().min(1, { message: "This field is reqiured." }),
+  faculty: z.string().min(1, { message: "Please select faculty" }),
+  name: z.string().trim().min(1, { message: "This field is required." }),
+  email: z
+    .string()
+    .min(1, { message: "This field is required" })
+    .email("This is not a valid email."),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." })
+    .max(32, { message: "Password should not exceed 32 characters." })
+    .regex(/[A-Z]/, { message: "One uppercase character is required." })
+    .regex(/[a-z]/, { message: "One lowercase character is required." })
+    .regex(/[0-9]/, { message: "One number is required." })
+    .regex(/[^A-Za-z0-9]/, {
+      message: "One special character is required.",
+    })
+    .regex(/^[~`!@#$%^&*()_+=[\]\\{}|;':",.<>?a-zA-Z0-9-]+$/, {
+      message: "Password must be English letters.",
+    }),
+});
+
+function AddUserForm() {
+  const { facultyLists, academicYearLists } = useDataContext();
   const [apiLoading, setApiLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
-  const { facultyLists, academicYearLists } = useDataContext();
-
-  const formSchema = z
-    .object({
-      username: z
-        .string()
-        .trim()
-        .min(1, { message: "This field is required." }),
-      role: z.string().trim().min(1, { message: "This field is required." }),
-      email: z
-        .string()
-        .min(1, { message: "This field is required" })
-        .email("This is not a valid email."),
-      facultyType: z.string().min(1, { message: "This field is reqiured." }),
-      academicYear: z.string().min(1, { message: "This field is reqiured." }),
-      password: z
-        .string()
-        .min(8, { message: "Password must be at least 8 characters." })
-        .max(32, { message: "Password should not exceed 32 characters." })
-        .regex(/[A-Z]/, { message: "One uppercase character is required." })
-        .regex(/[a-z]/, { message: "One lowercase character is required." })
-        .regex(/[0-9]/, { message: "One number is required." })
-        .regex(/[^A-Za-z0-9]/, {
-          message: "One special character is required.",
-        })
-        .regex(/^[~`!@#$%^&*()_+=[\]\\{}|;':",.<>?a-zA-Z0-9-]+$/, {
-          message: "Password must be English letters.",
-        }),
-      confirmpassword: z
-        .string()
-        .min(1, { message: "This field is required." }),
-      accept: z.boolean().refine((value) => value === true, {
-        message: "Please agree before registering.",
-      }),
-    })
-    .refine((data) => data.password === data.confirmpassword, {
-      path: ["confirmpassword"],
-      message: "Passwords does not match",
-    });
-
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
       role: "",
       academicYear: "",
-      confirmpassword: "",
-      facultyType: "",
-      accept: false,
+      faculty: "",
+      name: "",
+      email: "",
+      password: "",
     },
   });
+  const { toast } = useToast();
 
-  async function handleLogin(values) {
+  const onSubmit = async (values) => {
     setApiLoading(true);
     const jsonData = {
-      name: values.username,
+      name: values.name,
       email: values.email,
-      role: values.role.toLowerCase(),
+      role: values.role,
       password: values.password,
-      faculty: values.facultyType,
+      faculty: "66028274c8ecd2b903bc0b6c",
       academicYear: values.academicYear,
       termsAgreed: true,
     };
@@ -94,14 +81,18 @@ function Index() {
     );
 
     if (response.status === 201) {
-      router.push("/register-completed");
+      router.back();
     } else if (response.status === 400) {
       setErrMsg("Email is already registered.");
     }
     setApiLoading(false);
-  }
 
-  // function render icon check validate password
+    toast({
+      title: `New ${values.role} account created!`,
+      description: `Username : ${values.name}`,
+      action: <ToastAction altText="OK">OK</ToastAction>,
+    });
+  };
   const renderCheckValidatePassword = (values, validate) => {
     const regexMinMax = /^.{8,32}$/g;
     const regexDigit = /(?=.*?[0-9])/g;
@@ -143,28 +134,10 @@ function Index() {
     }
     return <FontAwesomeIcon icon={faCheck} className="text-sm text-gray-300" />;
   };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleLogin)}>
-        <InputField
-          label="Username"
-          name="username"
-          form={form}
-          placeholder="Admin"
-        />
-        <InputField
-          label="Email"
-          name="email"
-          form={form}
-          placeholder="abc@gmail.com"
-        />
-        <SelectField
-          label="Role"
-          name="role"
-          form={form}
-          data={[{ id: 1, name: "Guest", value: "guest" }]}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <SelectField label="Role" name="role" form={form} data={userRoles} />
         <SelectField
           label="Academic Year"
           name="academicYear"
@@ -172,10 +145,22 @@ function Index() {
           data={reformatListYear(academicYearLists?.year)}
         />
         <SelectField
-          label="Faculty Type"
-          name="facultyType"
+          label="Faculty"
+          name="faculty"
           form={form}
           data={reformatListFaculty(facultyLists?.faculty)}
+        />
+        <InputField
+          label="Username"
+          name="name"
+          form={form}
+          placeholder="username"
+        />
+        <InputField
+          label="Email"
+          name="email"
+          form={form}
+          placeholder="abc@gmail.com"
         />
         <InputField
           label="Password"
@@ -225,34 +210,16 @@ function Index() {
             </div>
           </div>
         </div>
-        <InputField
-          label="Confirm Password"
-          name="confirmpassword"
-          form={form}
-          type="password"
-          placeholder="xxxx"
-        />
-        <CheckField
-          name="accept"
-          form={form}
-          label="Please accept"
-          className="mt-6"
-        />
-        <Button disabled={apiLoading} type="submit" className="w-full mt-8">
-          {apiLoading ? "Please wait" : "Register"}
+
+        <Button disabled={apiLoading} type="submit" className="w-full mt-4">
+          {apiLoading ? "Please wait" : "Submit"}
         </Button>
         <p className="text-center text-[12px] text-negative mt-2">
           {errMsg && errMsg}
-        </p>
-        <p className="text-center p3 mt-4">
-          Already have an account?{" "}
-          <Link href="/login" className="text-info">
-            Log In
-          </Link>
         </p>
       </form>
     </Form>
   );
 }
 
-export default Index;
+export default AddUserForm;

@@ -13,8 +13,11 @@ import MakeTable from "@/components/MakeTable";
 import moment from "moment";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getFacultyFromID } from "@/app/utils/common";
+import { useDataContext } from "@/app/context/ContextProvider";
 
-function UserTable() {
+function UserTable({ userData }) {
+  const { facultyLists } = useDataContext();
   const loading = { show: true, error: "" };
   const [filters] = useState(["username", "email"]);
   const searchInputRef = useRef(null);
@@ -30,63 +33,22 @@ function UserTable() {
     []
   );
 
-  const DATA = [
-    {
-      id: 0,
-      joined_date: "12-2-2023",
-      email: "test@gmail.com",
-      username: "Tester 1",
-      role: "Student",
-      faculty_type: "Faculty of Engineering",
-    },
-    {
-      id: 1,
-      joined_date: "12-3-2023",
-      email: "test1@gmail.com",
-      username: "Tester 2",
-      role: "Student",
-      faculty_type: "Faculty of Engineering",
-    },
-    {
-      id: 2,
-      joined_date: "2-3-2023",
-      email: "3@gmail.com",
-      username: "Tester 3",
-      role: "Marketing Manager",
-      faculty_type: "Faculty of Engineering",
-    },
-    {
-      id: 3,
-      joined_date: "12-6-2023",
-      email: "test4@gmail.com",
-      username: "Tester 4",
-      role: "Guest",
-      faculty_type: "Faculty of Science",
-    },
-    {
-      id: 4,
-      joined_date: "1-3-2023",
-      email: "test5@gmail.com",
-      username: "Tester 5",
-      role: "Guest",
-      faculty_type: "Faculty of Medicine",
-    },
-    {
-      id: 5,
-      joined_date: "12-3-2023",
-      email: "test6@gmail.com",
-      username: "Tester 6",
-      role: "Student",
-      faculty_type: "Faculty of Engineering",
-    },
-  ];
-
-  const data = useMemo(() => DATA || [], []);
+  const data = userData;
 
   const CellDate = (tableProps) => {
     const component = useMemo(
       () =>
-        moment(tableProps.row.original.joined_date).format("DD MMM YYYY HH:mm"),
+        moment(tableProps.row.original.createdAt).format("DD MMM YYYY HH:mm"),
+      [tableProps]
+    );
+
+    return component;
+  };
+
+  const CellFaculty = (tableProps) => {
+    const facultydata = tableProps.row.original.faculty;
+    const component = useMemo(
+      () => <p>{getFacultyFromID(facultyLists?.faculty, facultydata)}</p>,
       [tableProps]
     );
 
@@ -96,14 +58,14 @@ function UserTable() {
   const COLUMNS = [
     {
       Header: "Joined Date",
-      accessor: "joined_date",
+      accessor: "createdAt",
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellDate(tableProps),
     },
     {
       Header: "Username",
-      accessor: "username",
+      accessor: "name",
       width: 134,
       maxWidth: 134,
     },
@@ -121,9 +83,10 @@ function UserTable() {
     },
     {
       Header: "Faculty Type",
-      accessor: "faculty_type",
+      accessor: "faculty",
       width: 104,
       maxWidth: 104,
+      Cell: (tableProps) => CellFaculty(tableProps),
     },
   ];
 

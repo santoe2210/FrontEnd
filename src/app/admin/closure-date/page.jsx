@@ -66,10 +66,7 @@ const page = async () => {
         &gt; <span className="font-bold">Academic Closure Dates</span>{" "}
       </div>
       <div className="py-9 px-12">
-        <ClosureDateTable
-          oriData={newData || {}}
-          academicyearLists={academicYerLists?.year || []}
-        />
+        <ClosureDateTable oriData={newData || {}} />
       </div>
     </>
   );

@@ -35,8 +35,10 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { Label } from "../ui/label";
+import callService from "@/app/utils/callService";
 
-function ArticleTable() {
+function ArticleTable({ lists, usrToken }) {
+  console.log(lists);
   const [loading, setLoading] = useState({ show: true, error: "" });
   const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
   const [filters] = useState(["name", "article_name"]);
@@ -129,7 +131,7 @@ function ArticleTable() {
     setOriData(DATA);
   }, []);
 
-  const data = useMemo(() => oriData, [oriData]);
+  const data = lists;
 
   // open publish modal
   const openPublishModal = (checkPublish, item) => {
@@ -143,7 +145,7 @@ function ArticleTable() {
   // open comment modal
   const openCommentModal = (item) => {
     setCommentData({
-      text: item.comment,
+      text: item.comments,
       itemData: item,
     });
     setCommentModalVerify(true);
@@ -152,7 +154,7 @@ function ArticleTable() {
   const CellDate = (tableProps) => {
     const component = useMemo(
       () =>
-        moment(tableProps.row.original.joined_date).format("DD MMM YYYY HH:mm"),
+        moment(tableProps.row.original.createdAt).format("DD MMM YYYY HH:mm"),
       [tableProps]
     );
 
@@ -164,10 +166,10 @@ function ArticleTable() {
       () => (
         <div>
           <Link
-            href={tableProps.row.original.article_link}
+            href={tableProps.row.original.article}
             className="text-info underline"
           >
-            {tableProps.row.original.article_name}
+            {tableProps.row.original.article}
           </Link>
         </div>
       ),
@@ -181,9 +183,9 @@ function ArticleTable() {
     const component = useMemo(
       () => (
         <p className="p3">
-          {!tableProps.row.original.comment
+          {!tableProps.row.original.comments
             ? "-"
-            : tableProps.row.original.comment}
+            : tableProps.row.original.comments}
         </p>
       ),
       [tableProps]
@@ -197,7 +199,7 @@ function ArticleTable() {
       () => (
         <div>
           <Switch
-            checked={tableProps.row.original.approve}
+            checked={tableProps.row.original.status === "approved" || false}
             onCheckedChange={(value) =>
               openPublishModal(value, tableProps.row.original)
             }
@@ -231,34 +233,40 @@ function ArticleTable() {
   const COLUMNS = [
     {
       Header: "Date",
-      accessor: "joined_date",
+      accessor: "createdAt",
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellDate(tableProps),
     },
     {
       Header: "Student Name",
-      accessor: "name",
+      accessor: "documentOwner",
+      width: 134,
+      maxWidth: 134,
+    },
+    {
+      Header: "Article Title",
+      accessor: "title",
       width: 134,
       maxWidth: 134,
     },
     {
       Header: "Article",
-      accessor: "article_name",
+      accessor: "article",
       width: 124,
       maxWidth: 124,
       Cell: (tableProps) => CellArticle(tableProps),
     },
     {
       Header: "Comment",
-      accessor: "comment",
+      accessor: "comments",
       width: 134,
       maxWidth: 134,
       Cell: (tableProps) => CellComment(tableProps),
     },
     {
       Header: "Publish",
-      accessor: "approve",
+      accessor: "status",
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellStatus(tableProps),
@@ -319,7 +327,7 @@ function ArticleTable() {
       initialState: {
         sortBy: [
           {
-            id: "joined_date",
+            id: "createdAt",
             desc: true,
           },
         ],
@@ -413,33 +421,91 @@ function ArticleTable() {
   );
 
   const changePublishStatus = async () => {
-    const newData = [];
-    oriData.forEach((entry) => {
-      if (entry.id === publshData.itemData.id) {
-        const singleItem = entry;
-        singleItem.approve = publshData.state;
-        newData.push(singleItem);
-      } else {
-        newData.push(entry);
+    console.log(publshData);
+
+    const response = await callService(
+      "PATCH",
+      `${process.env.API_URL}/file/updateFileStatus/${publshData?.itemData?._id}/`,
+      {
+        title: publshData.itemData?.title,
+        status: publshData?.state ? "approved" : "submitted",
+      },
+      {
+        Authorization: `Bearer ${usrToken}`,
       }
-    });
-    setOriData(newData);
-    setModalVerify(false);
+    );
+    if (response.status === 200) {
+      const newData = [];
+      oriData.forEach((entry) => {
+        if (entry.id === publshData.itemData.id) {
+          const singleItem = entry;
+          singleItem.approve = publshData.state ? "approved" : "submitted";
+          newData.push(singleItem);
+        } else {
+          newData.push(entry);
+        }
+      });
+      setOriData(newData);
+      setModalVerify(false);
+    }
   };
 
   const changeComment = async () => {
-    const newData = [];
-    oriData.forEach((entry) => {
-      if (entry.id === commentData.itemData.id) {
-        const singleItem = entry;
-        singleItem.comment = commentData.text;
-        newData.push(singleItem);
+    if (commentData?.itemData?.commentId) {
+      const response = await callService(
+        "PATCH",
+        `${process.env.API_URL}/comment/editComment/${commentData?.itemData?.commentId}/`,
+        {
+          comment: commentData.text,
+          contributionId: commentData.itemData?._id,
+        },
+        {
+          Authorization: `Bearer ${usrToken}`,
+        }
+      );
+      if (response.status === 200) {
+        const newData = [];
+        oriData.forEach((entry) => {
+          if (entry.id === commentData.itemData.id) {
+            const singleItem = entry;
+            singleItem.comments = commentData.text;
+            newData.push(singleItem);
+          } else {
+            newData.push(entry);
+          }
+        });
+        setOriData(newData);
+        setCommentModalVerify(false);
       } else {
-        newData.push(entry);
       }
-    });
-    setOriData(newData);
-    setCommentModalVerify(false);
+    } else {
+      const response = await callService(
+        "POST",
+        `${process.env.API_URL}/comment/createComment/${commentData.itemData?._id}/`,
+        {
+          commentOwner: commentData.itemData?.documentOwnerId,
+          comment: commentData.text,
+        },
+        {
+          Authorization: `Bearer ${usrToken}`,
+        }
+      );
+      if (response.status === 201) {
+        const newData = [];
+        oriData.forEach((entry) => {
+          if (entry.id === commentData.itemData.id) {
+            const singleItem = entry;
+            singleItem.comments = commentData.text;
+            newData.push(singleItem);
+          } else {
+            newData.push(entry);
+          }
+        });
+        setOriData(newData);
+        setCommentModalVerify(false);
+      } else {
+      }
+    }
   };
 
   return (

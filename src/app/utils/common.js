@@ -16,11 +16,25 @@ export function getYearNumberFromID(data, id) {
   return filterItem[0]?.year;
 }
 
+export function getFacultyFromID(data, id) {
+  const filterItem = data.filter((item) => item._id === id);
+  return filterItem[0]?.name;
+}
+
 export function reformatListYear(acYearList) {
   const temp = acYearList.map((ys) => ({
     id: ys._id,
     value: ys._id,
     name: String(ys.year),
+  }));
+  return temp;
+}
+
+export function reformatListFaculty(lists) {
+  const temp = lists.map((ys) => ({
+    id: ys._id,
+    value: ys._id,
+    name: String(ys.name),
   }));
   return temp;
 }

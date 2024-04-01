@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "../ui/button";
+import { useDataContext } from "@/app/context/ContextProvider";
 
-function ClosureDateTable({ oriData, academicyearLists }) {
+function ClosureDateTable({ oriData }) {
+  const { academicYearLists } = useDataContext();
   const loading = { show: true, error: "" };
   const [dropdownFilter, setDropdownFilter] = useState("All");
   const [filters] = useState(["academicYear"]);

@@ -1,8 +1,26 @@
 import Link from "next/link";
 import React from "react";
 import ContributionTable from "@/components/MarketingManager/ContributionTable";
+import { getToken } from "@/app/utils/cookie";
 
-function ContributionsLists() {
+async function getAllContribution(userToken) {
+  const res = await fetch(`${process.env.API_URL}/file/getAllFiles`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    console.log("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
+async function ContributionsLists() {
+  const token = await getToken();
+  const contributionLists = await getAllContribution(token);
+  console.log(contributionLists);
   return (
     <>
       <div className="h-[60px] bg-white w-full px-5 py-5 p3">

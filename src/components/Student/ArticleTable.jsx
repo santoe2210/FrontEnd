@@ -150,8 +150,7 @@ const DATA = [
 
 const CellDate = (tableProps) => {
   const component = useMemo(
-    () =>
-      moment(tableProps.row.original.submittedDate).format("DD MMM YYYY HH:mm"),
+    () => moment(tableProps.row.original.createdAt).format("DD MMM YYYY HH:mm"),
     [tableProps]
   );
 
@@ -162,13 +161,16 @@ const CellStatus = (tableProps) => {
   const listStatus = {
     approved: "text-positive",
     pending: "text-warning",
+    submitted: "text-disable",
     draft: "text-disable",
   };
 
   const component = useMemo(
     () => (
       <div>
-        <p className={listStatus[status]}>{status}</p>
+        <p className={listStatus[status]}>
+          {status[0].toUpperCase() + status.slice(1)}
+        </p>
       </div>
     ),
     [tableProps]
@@ -215,14 +217,14 @@ const CellArticle = (tableProps) => {
 const COLUMNS = [
   {
     Header: "Date",
-    accessor: "submittedDate",
+    accessor: "createdAt",
     width: 104,
     maxWidth: 104,
     Cell: (tableProps) => CellDate(tableProps),
   },
   {
     Header: "Author",
-    accessor: "user",
+    accessor: "documentOwner",
     width: 134,
     maxWidth: 134,
   },
@@ -243,7 +245,7 @@ const COLUMNS = [
   },
   {
     Header: "Comment",
-    accessor: "comment",
+    accessor: "comments",
     width: 134,
     maxWidth: 134,
     disableSortBy: true,
@@ -265,7 +267,8 @@ const COLUMNS = [
   },
 ];
 
-const ArticleTable = () => {
+const ArticleTable = ({ lists }) => {
+  console.log(lists);
   const [loading, setLoading] = useState({ show: true, error: "" });
   const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
   const [filters] = useState(["user", "title", "article"]);
@@ -274,7 +277,7 @@ const ArticleTable = () => {
   const [searchData, setSearchData] = useState([]);
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => DATA, []);
+  const data = lists;
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -351,7 +354,7 @@ const ArticleTable = () => {
       initialState: {
         sortBy: [
           {
-            id: "submittedDate",
+            id: "createdAt",
             desc: true,
           },
         ],
