@@ -40,7 +40,7 @@ function Index() {
     if (response.status === 201) {
       await setToken(response.data.token);
       const routes = {
-        MMR: "/marketing-manager",
+        "marketing manager": "/marketing-manager",
         admin: "/admin",
         "marketing coordinator": "/marketing-coordinator",
         guest: "/guest",

@@ -32,13 +32,13 @@ import { Switch } from "../ui/switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
+  faEye,
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { Label } from "../ui/label";
 import callService from "@/app/utils/callService";
 
 function ArticleTable({ lists, usrToken }) {
-  console.log(lists);
   const [loading, setLoading] = useState({ show: true, error: "" });
   const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
   const [filters] = useState(["name", "article_name"]);
@@ -215,12 +215,18 @@ function ArticleTable({ lists, usrToken }) {
   const CellInfo = (tableProps) => {
     const component = useMemo(
       () => (
-        <div>
+        <div className="flex space-x-2 items-center">
+          <Link
+            href={`/marketing-coordinator/articles/${tableProps.row.original._id}`}
+            passHref
+          >
+            <FontAwesomeIcon icon={faEye} className=" text-info mt-2" />
+          </Link>
           <Button
             variant="ghost"
             onClick={() => openCommentModal(tableProps.row.original)}
           >
-            <FontAwesomeIcon icon={faEdit} className="text-[18px] text-info" />
+            <FontAwesomeIcon icon={faEdit} className=" text-info" />
           </Button>
         </div>
       ),

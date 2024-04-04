@@ -29,8 +29,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import moment from "moment";
+import Link from "next/link";
+import { getFacultyFromID } from "@/app/utils/common";
+import { useDataContext } from "@/app/context/ContextProvider";
+import callService from "@/app/utils/callService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
-function ContributionTable() {
+function ContributionTable({ lists, usrToken }) {
+  const { facultyLists } = useDataContext();
   const loading = { show: true, error: "" };
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
@@ -47,47 +54,7 @@ function ContributionTable() {
     []
   );
 
-  const ex = [
-    {
-      id: "m5gr84i9",
-      article_name: "Example 1 test kdfjdof dl jdofjdo dfodfd9d df fdsf fd d",
-      date: "12-2-2020",
-      aritcle_type: "WOR",
-      faculty_type: "Faculty of Engineering",
-      comment: "",
-      status: "Approved",
-    },
-    {
-      id: "m5gr8429",
-      article_name: "Example 2",
-      date: "1-2-2023",
-      aritcle_type: "WER",
-      faculty_type: "Faculty of Art",
-      comment: "good job",
-      status: "Approved",
-    },
-    {
-      id: "m5ge8429",
-      article_name: "Example 3",
-      date: "12-5-2023",
-      aritcle_type: "WER",
-      faculty_type: "Faculty of Science",
-      comment: "",
-      status: "",
-    },
-    {
-      id: "m42ge8429",
-      article_name: "Example 4",
-      date: "12-2-2023",
-      aritcle_type: "WAR",
-      faculty_type: "Faculty of Medicine",
-      comment: "",
-      status: "Approved",
-    },
-  ];
-
-  const data = useMemo(() => ex || [], []);
-
+  const data = lists;
   const IndeterminateCheckbox = React.forwardRef(
     ({ indeterminate, ...rest }, ref) => {
       const defaultRef = useRef();
@@ -145,7 +112,42 @@ function ContributionTable() {
 
   const CellDate = (tableProps) => {
     const component = useMemo(
-      () => moment(tableProps.row.original.date).format("DD MMM YYYY HH:mm"),
+      () =>
+        moment(tableProps.row.original.createdAt).format("DD MMM YYYY HH:mm"),
+      [tableProps]
+    );
+
+    return component;
+  };
+
+  const CellArticle = (tableProps) => {
+    const component = useMemo(
+      () => (
+        <div>
+          <Link
+            href={tableProps.row.original.article}
+            className="text-info underline"
+          >
+            {tableProps.row.original.article}
+          </Link>
+        </div>
+      ),
+      [tableProps]
+    );
+
+    return component;
+  };
+
+  const CellFaculty = (tableProps) => {
+    const component = useMemo(
+      () => (
+        <p>
+          {getFacultyFromID(
+            facultyLists?.faculty,
+            tableProps.row.original?.faculty
+          ) || "-"}
+        </p>
+      ),
       [tableProps]
     );
 
@@ -156,10 +158,28 @@ function ContributionTable() {
     const component = useMemo(
       () => (
         <p className="p3">
-          {!tableProps.row.original.comment
+          {!tableProps.row.original.comments
             ? "-"
-            : tableProps.row.original.comment}
+            : tableProps.row.original.comments}
         </p>
+      ),
+      [tableProps]
+    );
+
+    return component;
+  };
+
+  const CellInfo = (tableProps) => {
+    const component = useMemo(
+      () => (
+        <div className="flex space-x-2 items-center">
+          <Link
+            href={`/marketing-manager/contributions/${tableProps.row.original._id}`}
+            passHref
+          >
+            <FontAwesomeIcon icon={faEye} className=" text-info mt-2" />
+          </Link>
+        </div>
       ),
       [tableProps]
     );
@@ -171,39 +191,55 @@ function ContributionTable() {
     () => [
       {
         Header: "Date",
-        accessor: "date",
-        width: 124,
-        maxWidth: 124,
+        accessor: "createdAt",
+        width: 94,
+        maxWidth: 94,
         Cell: (tableProps) => CellDate(tableProps),
       },
       {
-        Header: "Article Name",
-        accessor: "article_name",
-        width: 164,
-        maxWidth: 164,
+        Header: "Student Name",
+        accessor: "documentOwner",
+        width: 134,
+        maxWidth: 134,
+      },
+      {
+        Header: "Article Title",
+        accessor: "title",
+        width: 154,
+        maxWidth: 154,
         // Cell: (tableProps) => CellNameDate(tableProps),
         style: { whiteSpace: "unset" },
       },
       {
-        Header: "Article Type",
-        accessor: "aritcle_type",
-        width: 104,
-        maxWidth: 104,
+        Header: "Article",
+        accessor: "article",
+        width: 124,
+        maxWidth: 124,
+        Cell: (tableProps) => CellArticle(tableProps),
       },
       {
         Header: "Faculty Type",
-        accessor: "faculty_type",
-        width: 154,
-        maxWidth: 154,
+        accessor: "faculty",
+        width: 104,
+        maxWidth: 104,
+        Cell: (tableProps) => CellFaculty(tableProps),
         style: { whiteSpace: "unset" },
       },
       {
         Header: "Comment",
-        accessor: "comment",
-        filter: "equals",
-        width: 84,
-        maxWidth: 84,
+        accessor: "comments",
+        width: 134,
+        maxWidth: 134,
         Cell: (tableProps) => CellComment(tableProps),
+        style: { whiteSpace: "unset" },
+      },
+      {
+        Header: "",
+        accessor: "info",
+        disableSortBy: true,
+        width: 80,
+        maxWidth: 80,
+        Cell: (tableProps) => CellInfo(tableProps),
       },
     ],
     []
@@ -362,8 +398,26 @@ function ContributionTable() {
     }
   }, []);
 
-  const handleDownload = () => {
-    console.log(page);
+  const handleDownload = async () => {
+    const selectedFiles = page.filter((pg) => pg.isSelected);
+
+    if (selectedFiles.length > 0) {
+      const payload = selectedFiles.map((file) => file.original._id);
+
+      await callService(
+        "POST",
+        `${process.env.API_URL}/file/download`,
+        {
+          fileIds: payload,
+        },
+        {
+          Authorization: `Bearer ${usrToken}`,
+        }
+      );
+      // if(response.status ){
+
+      // }
+    }
   };
 
   return (

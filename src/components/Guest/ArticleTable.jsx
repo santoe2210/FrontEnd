@@ -19,6 +19,8 @@ import moment from "moment";
 import MakeTable from "../MakeTable";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 const DATA = [
   {
@@ -125,7 +127,6 @@ const DATA = [
 
 //filter faculty
 
-
 const CellDate = (tableProps) => {
   const component = useMemo(
     () =>
@@ -135,6 +136,7 @@ const CellDate = (tableProps) => {
 
   return component;
 };
+
 const CellArticle = (tableProps) => {
   const component = useMemo(
     () => (
@@ -153,52 +155,114 @@ const CellArticle = (tableProps) => {
   return component;
 };
 
+const CellComment = (tableProps) => {
+  const component = useMemo(
+    () => (
+      <p className="p3">
+        {!tableProps.row.original.comments
+          ? "-"
+          : tableProps.row.original.comments}
+      </p>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
+const CellStatus = (tableProps) => {
+  const component = useMemo(
+    () => (
+      <p>
+        {tableProps.row.original.status === "approved" ? (
+          <span className="text-positive">Approved</span>
+        ) : (
+          <span>Submitted</span>
+        )}
+      </p>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
+const CellInfo = (tableProps) => {
+  const component = useMemo(
+    () => (
+      <div className="flex space-x-5">
+        <Link href={`/guest/articles/${tableProps.row.original._id}`} passHref>
+          <FontAwesomeIcon icon={faEye} className="text-info" />
+        </Link>
+      </div>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
 const COLUMNS = [
   {
     Header: "Date",
-    accessor: "submittedDate",
+    accessor: "createdAt",
     width: 104,
     maxWidth: 104,
     Cell: (tableProps) => CellDate(tableProps),
   },
   {
-    Header: "Author",
-    accessor: "user",
+    Header: "Student Name",
+    accessor: "documentOwner",
     width: 134,
     maxWidth: 134,
   },
   {
-    Header: "Title",
+    Header: "Article Title",
     accessor: "title",
-    width: 124,
-    maxWidth: 124,
+    width: 134,
+    maxWidth: 134,
   },
   {
     Header: "Article",
     accessor: "article",
-    disableSortBy: true,
-    width: 134,
-    maxWidth: 134,
+    width: 124,
+    maxWidth: 124,
     Cell: (tableProps) => CellArticle(tableProps),
   },
-//   {
-//     Header: "Academic Year",
-//     accessor: "academicYear",
-//     width: 104,
-//     maxWidth: 104,
-//   },
+  {
+    Header: "Comment",
+    accessor: "comments",
+    width: 134,
+    maxWidth: 134,
+    Cell: (tableProps) => CellComment(tableProps),
+  },
+  {
+    Header: "Publish",
+    accessor: "status",
+    width: 104,
+    maxWidth: 104,
+    Cell: (tableProps) => CellStatus(tableProps),
+  },
+  {
+    Header: "",
+    accessor: "info",
+    disableSortBy: true,
+    width: 80,
+    maxWidth: 80,
+    Cell: (tableProps) => CellInfo(tableProps),
+  },
 ];
 
-const ArticleTable = () => {
+const ArticleTable = ({ lists }) => {
   const [loading, setLoading] = useState({ show: true, error: "" });
   const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
-  const [filters] = useState(["user", "title","article"]);
+  const [filters] = useState(["user", "title", "article"]);
   const searchInputRef = useRef(null);
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => DATA, []);
+  const data = lists;
 
   const defaultColumn = React.useMemo(
     () => ({

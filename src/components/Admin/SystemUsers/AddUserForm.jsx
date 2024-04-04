@@ -45,6 +45,7 @@ const FormSchema = z.object({
 
 function AddUserForm() {
   const { facultyLists, academicYearLists } = useDataContext();
+
   const [apiLoading, setApiLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
@@ -68,7 +69,7 @@ function AddUserForm() {
       email: values.email,
       role: values.role,
       password: values.password,
-      faculty: "66028274c8ecd2b903bc0b6c",
+      faculty: values.faculty,
       academicYear: values.academicYear,
       termsAgreed: true,
     };

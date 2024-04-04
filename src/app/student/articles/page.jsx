@@ -1,6 +1,5 @@
 import { getToken } from "@/app/utils/cookie";
 import ArticleTable from "@/components/Student/ArticleTable";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
 

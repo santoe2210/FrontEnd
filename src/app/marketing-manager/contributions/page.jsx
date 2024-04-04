@@ -20,7 +20,7 @@ async function getAllContribution(userToken) {
 async function ContributionsLists() {
   const token = await getToken();
   const contributionLists = await getAllContribution(token);
-  console.log(contributionLists);
+
   return (
     <>
       <div className="h-[60px] bg-white w-full px-5 py-5 p3">
@@ -34,7 +34,10 @@ async function ContributionsLists() {
         &gt; <span className="font-bold">Contributions</span>{" "}
       </div>
       <div className="py-9 px-12">
-        <ContributionTable />
+        <ContributionTable
+          lists={contributionLists?.data || []}
+          usrToken={token}
+        />
       </div>
     </>
   );

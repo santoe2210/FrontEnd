@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { toBase64 } from "@/app/utils/common";
 
 function FileUploadField({
   label,
@@ -23,39 +24,55 @@ function FileUploadField({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <input
+            {/* <input
               type="file"
               multiple
-              onChange={(event) => {
+              onChange={async (event) => {
                 let files = [];
-
                 for (const file of Array.from(event.target.files)) {
-                  const plain = { file: file, url: URL.createObjectURL(file) };
-                  files.push(plain);
+                  const base64 = await toBase64(file);
+                  files.push({
+                    name: file?.name || "empty",
+                    file_url: base64,
+                  });
                 }
-
                 form.setValue("articles", files);
+
+                // for (const file of Array.from(event.target.files)) {
+                //   const base64 = await toBase64(file[0]);
+                //   const plain = { file: file, url: URL.createObjectURL(file) };
+                //   files.push(plain);
+                // }
+
+                // form.setValue("articles", files);
               }}
-            />
-            {/* <Input
+            /> */}
+            <Input
               type={type}
               placeholder={placeholder}
               {...fieldProps}
               multiple
-              onChange={(event) => {
-                const files = event.target.files;
-                let result = [];
-
-                if (files && files.length > 0) {
-                  Array.from(files).forEach((file) => {
-                    console.log(file);
-                    result.push({ ...file });
+              onChange={async (event) => {
+                let files = [];
+                for (const file of Array.from(event.target.files)) {
+                  const base64 = await toBase64(file);
+                  files.push({
+                    name: file?.name || "empty",
+                    file_url: base64,
+                    type: file?.type,
                   });
-                  console.log(result);
-                  form.setValue("articles", result);
                 }
+                form.setValue("articles", files);
+
+                // for (const file of Array.from(event.target.files)) {
+                //   const base64 = await toBase64(file[0]);
+                //   const plain = { file: file, url: URL.createObjectURL(file) };
+                //   files.push(plain);
+                // }
+
+                // form.setValue("articles", files);
               }}
-            /> */}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

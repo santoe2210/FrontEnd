@@ -23,129 +23,6 @@ import { Badge } from "../ui/badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 
-const DATA = [
-  {
-    id: 1,
-    title: "Solarbreeze",
-    article: "Volutpat.avi",
-    articleType: "DOC",
-    comment: "excellent",
-    user: "Phonemyat Khant",
-    academicYear: 2022,
-    submittedDate: "1/22/2024",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 2,
-    title: "Zoolab",
-    article: "Pretium.xls",
-    articleType: "DOC",
-    comment: "great job",
-    user: "Phonemyat Khant",
-    academicYear: 2023,
-    submittedDate: "7/5/2022",
-    faculty: "Computing",
-    status: "approved",
-  },
-  {
-    id: 3,
-    title: "Opela",
-    article: "Nulla.avi",
-    articleType: "JPG",
-    comment: "",
-    user: "Phonemyat Khant",
-    academicYear: 2025,
-    submittedDate: "1/24/2023",
-    faculty: "BS",
-    status: "approved",
-  },
-  {
-    id: 4,
-    title: "Span",
-    article: "BibendumMorbi.mov",
-    articleType: "DOC",
-    comment: "need to improve",
-    user: "Phonemyat Khant",
-    academicYear: 2023,
-    submittedDate: "9/22/2022",
-    faculty: "CS",
-    status: "approved",
-  },
-  {
-    id: 5,
-    title: "Gembucket",
-    article: "EleifendDonecUt.tiff",
-    articleType: "DOC",
-    comment: "please fix",
-    user: "Phonemyat Khant",
-    academicYear: 2024,
-    submittedDate: "4/10/2022",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 6,
-    title: "Otcom",
-    article: "Proin.xls",
-    articleType: "PNG",
-    comment: "",
-    user: "Phonemyat Khant",
-    academicYear: 2022,
-    submittedDate: "8/1/2023",
-    faculty: "Computing",
-    status: "approved",
-  },
-  {
-    id: 7,
-    title: "Treeflex",
-    article: "Urna.mp3",
-    articleType: "DOC",
-    comment: "superb",
-    user: "Phonemyat Khant",
-    academicYear: 2025,
-    submittedDate: "12/5/2022",
-    faculty: "BS",
-    status: "approved",
-  },
-  {
-    id: 8,
-    title: "Cardguard",
-    article: "AcNibh.xls",
-    articleType: "DOC",
-    comment: "excellent",
-    user: "Phonemyat Khant",
-    academicYear: 2024,
-    submittedDate: "9/2/2022",
-    faculty: "CS",
-    status: "approved",
-  },
-  {
-    id: 9,
-    title: "Zathin",
-    article: "InHacHabitasse.tiff",
-    articleType: "DOC",
-    comment: "good work",
-    user: "Phonemyat Khant",
-    academicYear: 2023,
-    submittedDate: "4/30/2023",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 10,
-    title: "Subin",
-    article: "Dolor.mp3",
-    articleType: "JPEG",
-    comment: "",
-    user: "Phonemyat Khant",
-    academicYear: 2022,
-    submittedDate: "3/9/2023",
-    faculty: "Medicine",
-    status: "pending",
-  },
-];
-
 //filter faculty
 
 const CellDate = (tableProps) => {
@@ -182,11 +59,14 @@ const CellInfo = (tableProps) => {
   const component = useMemo(
     () => (
       <div className="flex space-x-5">
-        <Link href="/" passHref>
-          <FontAwesomeIcon icon={faEye} />
+        <Link
+          href={`/student/articles/${tableProps.row.original._id}`}
+          passHref
+        >
+          <FontAwesomeIcon icon={faEye} className="text-info" />
         </Link>
         <Link href="/" passHref>
-          <FontAwesomeIcon icon={faEdit} />
+          <FontAwesomeIcon icon={faEdit} className="text-info" />
         </Link>
       </div>
     ),
@@ -268,7 +148,6 @@ const COLUMNS = [
 ];
 
 const ArticleTable = ({ lists }) => {
-  console.log(lists);
   const [loading, setLoading] = useState({ show: true, error: "" });
   const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
   const [filters] = useState(["user", "title", "article"]);
