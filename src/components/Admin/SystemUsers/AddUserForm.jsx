@@ -82,7 +82,8 @@ function AddUserForm() {
     );
 
     if (response.status === 201) {
-      router.back();
+      router.push("/admin/system-users");
+      router.refresh();
     } else if (response.status === 400) {
       setErrMsg("Email is already registered.");
     }
@@ -90,6 +91,7 @@ function AddUserForm() {
 
     toast({
       title: `New ${values.role} account created!`,
+      variant: "success",
       description: `Username : ${values.name}`,
       action: <ToastAction altText="OK">OK</ToastAction>,
     });

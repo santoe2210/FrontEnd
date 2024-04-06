@@ -37,7 +37,7 @@ function ClosureDateTable({ oriData }) {
     []
   );
 
-  const data = oriData;
+  const data = useMemo(() => oriData, [oriData]);
 
   const CellDate = (tableProps, x) => {
     const component = useMemo(

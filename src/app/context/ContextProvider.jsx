@@ -15,6 +15,11 @@ export const ContextProvider = ({ children }) => {
     year: [],
   });
 
+  const [date, setDate] = useState({
+    count: 0,
+    date: [],
+  });
+
   return (
     <ThemeContext.Provider
       value={{
@@ -24,6 +29,8 @@ export const ContextProvider = ({ children }) => {
         setFacultyLists,
         academicYearLists,
         setAcademicYearLists,
+        date,
+        setDate,
       }}
     >
       {children}

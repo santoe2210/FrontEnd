@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import moment from "moment";
 import Link from "next/link";
-import { getFacultyFromID } from "@/app/utils/common";
+import { getClouserDateName, getFacultyFromID } from "@/app/utils/common";
 import { useDataContext } from "@/app/context/ContextProvider";
 import callService from "@/app/utils/callService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,7 +42,7 @@ function ContributionTable({ lists, usrToken }) {
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [dropdownFilter, setDropdownFilter] = useState("All");
-  const [filters] = useState(["article_name"]);
+  const [filters] = useState(["title", "documentOwner"]);
   const searchInputRef = useRef(null);
 
   const defaultColumn = React.useMemo(
@@ -122,32 +122,7 @@ function ContributionTable({ lists, usrToken }) {
 
   const CellArticle = (tableProps) => {
     const component = useMemo(
-      () => (
-        <div>
-          <Link
-            href={tableProps.row.original.article}
-            className="text-info underline"
-          >
-            {tableProps.row.original.article}
-          </Link>
-        </div>
-      ),
-      [tableProps]
-    );
-
-    return component;
-  };
-
-  const CellFaculty = (tableProps) => {
-    const component = useMemo(
-      () => (
-        <p>
-          {getFacultyFromID(
-            facultyLists?.faculty,
-            tableProps.row.original?.faculty
-          ) || "-"}
-        </p>
-      ),
+      () => <p>{tableProps.row.original.article}</p>,
       [tableProps]
     );
 
@@ -195,6 +170,7 @@ function ContributionTable({ lists, usrToken }) {
         width: 94,
         maxWidth: 94,
         Cell: (tableProps) => CellDate(tableProps),
+        style: { whiteSpace: "unset" },
       },
       {
         Header: "Student Name",
@@ -205,8 +181,8 @@ function ContributionTable({ lists, usrToken }) {
       {
         Header: "Article Title",
         accessor: "title",
-        width: 154,
-        maxWidth: 154,
+        width: 134,
+        maxWidth: 134,
         // Cell: (tableProps) => CellNameDate(tableProps),
         style: { whiteSpace: "unset" },
       },
@@ -220,9 +196,8 @@ function ContributionTable({ lists, usrToken }) {
       {
         Header: "Faculty Type",
         accessor: "faculty",
-        width: 104,
-        maxWidth: 104,
-        Cell: (tableProps) => CellFaculty(tableProps),
+        width: 134,
+        maxWidth: 134,
         style: { whiteSpace: "unset" },
       },
       {
@@ -344,7 +319,7 @@ function ContributionTable({ lists, usrToken }) {
   const dropdownOptions = useMemo(() => {
     const options = new Set();
     preGlobalFilteredRows.forEach((row) => {
-      options.add(row.values.faculty_type);
+      options.add(row.values.faculty);
     });
     return ["All", ...options.values()];
   }, [preGlobalFilteredRows]);
@@ -390,10 +365,10 @@ function ContributionTable({ lists, usrToken }) {
 
   const handleFilterDropdown = useCallback((value) => {
     if (value === "All") {
-      setFilter("faculty_type", undefined);
+      setFilter("faculty", undefined);
       setDropdownFilter("All");
     } else {
-      setFilter("faculty_type", value || undefined);
+      setFilter("faculty", value || undefined);
       setDropdownFilter(value);
     }
   }, []);
@@ -404,7 +379,7 @@ function ContributionTable({ lists, usrToken }) {
     if (selectedFiles.length > 0) {
       const payload = selectedFiles.map((file) => file.original._id);
 
-      await callService(
+      const response = await callService(
         "POST",
         `${process.env.API_URL}/file/download`,
         {

@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useCallback, useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import {
   useTable,
@@ -19,9 +13,14 @@ import moment from "moment";
 import MakeTable from "../MakeTable";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
+import { useDataContext } from "@/app/context/ContextProvider";
+import {
+  checkAcademicPassed,
+  getClouserDateDetail,
+  getClouserDateName,
+} from "@/app/utils/common";
 
 //filter faculty
 
@@ -38,7 +37,7 @@ const CellStatus = (tableProps) => {
   const listStatus = {
     approved: "text-positive",
     pending: "text-warning",
-    submitted: "text-disable",
+    submitted: "text-warning",
     draft: "text-disable",
   };
 
@@ -56,6 +55,13 @@ const CellStatus = (tableProps) => {
   return component;
 };
 const CellInfo = (tableProps) => {
+  const { date } = useDataContext();
+  const clouserdate = getClouserDateDetail(
+    date?.date,
+    tableProps.row.original?.chosenAcademicYear
+  );
+  const passed = checkAcademicPassed(clouserdate);
+  const status = tableProps.row.original.status === "approved";
   const component = useMemo(
     () => (
       <div className="flex space-x-5">
@@ -65,9 +71,16 @@ const CellInfo = (tableProps) => {
         >
           <FontAwesomeIcon icon={faEye} className="text-info" />
         </Link>
-        <Link href="/" passHref>
-          <FontAwesomeIcon icon={faEdit} className="text-info" />
-        </Link>
+        {!status && !passed ? (
+          <Link
+            href={`/student/articles/edit/${tableProps.row.original._id}`}
+            passHref
+          >
+            <FontAwesomeIcon icon={faEdit} className="text-info" />
+          </Link>
+        ) : (
+          <FontAwesomeIcon icon={faEdit} className="text-gray-400 mt-1" />
+        )}
       </div>
     ),
     [tableProps]
@@ -94,13 +107,33 @@ const CellArticle = (tableProps) => {
   return component;
 };
 
+const CellAcademic = (tableProps) => {
+  const { date } = useDataContext();
+  const component = useMemo(
+    () => (
+      <div>
+        <p>
+          {getClouserDateName(
+            date?.date,
+            tableProps.row.original?.chosenAcademicYear
+          ) || "-"}
+        </p>
+      </div>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
 const COLUMNS = [
   {
     Header: "Date",
     accessor: "createdAt",
-    width: 104,
-    maxWidth: 104,
+    width: 94,
+    maxWidth: 94,
     Cell: (tableProps) => CellDate(tableProps),
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Author",
@@ -113,8 +146,8 @@ const COLUMNS = [
     accessor: "title",
     width: 124,
     maxWidth: 124,
+    style: { whiteSpace: "unset" },
   },
-
   {
     Header: "Article",
     accessor: "article",
@@ -122,12 +155,22 @@ const COLUMNS = [
     width: 134,
     maxWidth: 134,
     Cell: (tableProps) => CellArticle(tableProps),
+    style: { whiteSpace: "unset" },
+  },
+  {
+    Header: "Academic Date",
+    accessor: "chosenAcademicYear",
+    disableSortBy: true,
+    width: 134,
+    maxWidth: 134,
+    Cell: (tableProps) => CellAcademic(tableProps),
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Comment",
     accessor: "comments",
-    width: 134,
-    maxWidth: 134,
+    width: 104,
+    maxWidth: 104,
     disableSortBy: true,
   },
   {
@@ -149,8 +192,8 @@ const COLUMNS = [
 
 const ArticleTable = ({ lists }) => {
   const [loading, setLoading] = useState({ show: true, error: "" });
-  const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
-  const [filters] = useState(["user", "title", "article"]);
+
+  const [filters] = useState(["title", "documentOwner"]);
   const searchInputRef = useRef(null);
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);

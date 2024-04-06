@@ -85,13 +85,13 @@ function SetClouserDate({ userToken }) {
       }
     );
     if (response.status === 201) {
+      router.push("/admin/closure-date");
+      router.refresh();
       toast({
         variant: "success",
         description: "Successfully set academic closure dates",
         action: <ToastAction altText="OK">OK</ToastAction>,
       });
-
-      router.push("/admin/closure-date");
     }
   }
 

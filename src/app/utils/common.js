@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function routePaths() {
   const paths = [
     "/login",
@@ -9,6 +11,24 @@ export function routePaths() {
     "/forgot-password-completed",
   ];
   return paths;
+}
+
+export function getClouserDateName(data, id) {
+  const filterItem = data?.filter((item) => item._id === id);
+
+  if (filterItem.length > 0) {
+    const name = `${moment(filterItem[0].closureDate).format(
+      "DD/MMM/YYYY"
+    )} to ${moment(filterItem[0].finalClosureDate).format("DD/MMM/YYYY")}`;
+    return name;
+  }
+
+  return "-";
+}
+
+export function getClouserDateDetail(data, id) {
+  const filterItem = data.filter((item) => item._id === id);
+  return filterItem[0];
 }
 
 export function getYearNumberFromID(data, id) {
@@ -39,6 +59,46 @@ export function reformatListFaculty(lists) {
   return temp;
 }
 
+export function reformatClouserDate(clouserLists, acYearList) {
+  const combinedArray = [];
+
+  clouserLists?.forEach((obj1) => {
+    const matchingObj = acYearList?.find(
+      (obj2) => obj2._id === obj1.academicYear
+    );
+
+    if (matchingObj) {
+      const combinedObj = {
+        ...obj1,
+        ...matchingObj,
+        value: obj1._id,
+      };
+
+      combinedArray.push(combinedObj);
+    }
+  });
+
+  const temp = combinedArray.map((ys) => ({
+    id: ys.value,
+    value: ys.value,
+    name: `${ys.year} (${moment(ys.closureDate).format(
+      "DD/MMM/YYYY"
+    )} to ${moment(ys.finalClosureDate).format("DD/MMM/YYYY")})`,
+  }));
+
+  return temp;
+}
+
+export function checkAcademicPassed(data) {
+  const finalClosureDate = moment(data?.finalClosureDate);
+  const currentDate = moment();
+
+  if (currentDate.isAfter(finalClosureDate)) {
+    return true;
+  }
+  return false;
+}
+
 export const toBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -46,3 +106,15 @@ export const toBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+export function splitBase64IntoChunks(base64Data, chunkSize) {
+  const chunks = [];
+  let index = 0;
+
+  while (index < base64Data.length) {
+    chunks.push(base64Data.slice(index, index + chunkSize));
+    index += chunkSize;
+  }
+
+  return chunks;
+}

@@ -5,8 +5,15 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useDataContext } from "@/app/context/ContextProvider";
 
-function NavLink({ name, link, profileData, facultyTypes, academicYerLists }) {
-  const { setUserProfile, setFacultyLists, setAcademicYearLists } =
+function NavLink({
+  name,
+  link,
+  profileData,
+  facultyTypes,
+  academicYerLists,
+  alldate,
+}) {
+  const { setUserProfile, setFacultyLists, setAcademicYearLists, setDate } =
     useDataContext();
   const pathname = usePathname();
 
@@ -20,7 +27,10 @@ function NavLink({ name, link, profileData, facultyTypes, academicYerLists }) {
     if (academicYerLists) {
       setAcademicYearLists(academicYerLists);
     }
-  }, [profileData, facultyTypes, academicYerLists]);
+    if (alldate) {
+      setDate(alldate);
+    }
+  }, [profileData, facultyTypes, academicYerLists, alldate]);
 
   useEffect(() => {
     document.querySelectorAll(".sidebar a").forEach((link) => {

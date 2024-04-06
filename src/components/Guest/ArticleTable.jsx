@@ -21,109 +21,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-
-const DATA = [
-  {
-    id: 1,
-    title: "Solarbreeze",
-    article: "Volutpat.avi",
-    user: "Dulce Wrightham",
-    academicYear: 2022,
-    submittedDate: "1/22/2024",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 2,
-    title: "Zoolab",
-    article: "Pretium.xls",
-    user: "Johanna Feild",
-    academicYear: 2023,
-    submittedDate: "7/5/2022",
-    faculty: "Computing",
-    status: "approved",
-  },
-  {
-    id: 3,
-    title: "Opela",
-    article: "Nulla.avi",
-    user: "Hansiain Castellanos",
-    academicYear: 2025,
-    submittedDate: "1/24/2023",
-    faculty: "BS",
-    status: "approved",
-  },
-  {
-    id: 4,
-    title: "Span",
-    article: "BibendumMorbi.mov",
-    user: "Chase Lovegrove",
-    academicYear: 2023,
-    submittedDate: "9/22/2022",
-    faculty: "CS",
-    status: "approved",
-  },
-  {
-    id: 5,
-    title: "Gembucket",
-    article: "EleifendDonecUt.tiff",
-    user: "Kurt Allum",
-    academicYear: 2024,
-    submittedDate: "4/10/2022",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 6,
-    title: "Otcom",
-    article: "Proin.xls",
-    user: "Juli Slowcock",
-    academicYear: 2022,
-    submittedDate: "8/1/2023",
-    faculty: "Computing",
-    status: "approved",
-  },
-  {
-    id: 7,
-    title: "Treeflex",
-    article: "Urna.mp3",
-    user: "Ulrick Lansbury",
-    academicYear: 2025,
-    submittedDate: "12/5/2022",
-    faculty: "BS",
-    status: "approved",
-  },
-  {
-    id: 8,
-    title: "Cardguard",
-    article: "AcNibh.xls",
-    user: "Eryn Parkin",
-    academicYear: 2024,
-    submittedDate: "9/2/2022",
-    faculty: "CS",
-    status: "approved",
-  },
-  {
-    id: 9,
-    title: "Zathin",
-    article: "InHacHabitasse.tiff",
-    user: "Mac Bocock",
-    academicYear: 2023,
-    submittedDate: "4/30/2023",
-    faculty: "Medicine",
-    status: "approved",
-  },
-  {
-    id: 10,
-    title: "Subin",
-    article: "Dolor.mp3",
-    user: "Trumaine Duding",
-    academicYear: 2022,
-    submittedDate: "3/9/2023",
-    faculty: "Medicine",
-    status: "approved",
-  },
-];
+import { useDataContext } from "@/app/context/ContextProvider";
+import { getClouserDateName } from "@/app/utils/common";
 
 //filter faculty
 
@@ -139,16 +38,7 @@ const CellDate = (tableProps) => {
 
 const CellArticle = (tableProps) => {
   const component = useMemo(
-    () => (
-      <div>
-        <Link
-          href={tableProps.row.original.article}
-          className="text-info underline"
-        >
-          {tableProps.row.original.article}
-        </Link>
-      </div>
-    ),
+    () => <p>{tableProps.row.original.article}</p>,
     [tableProps]
   );
 
@@ -187,6 +77,25 @@ const CellStatus = (tableProps) => {
   return component;
 };
 
+const CellAcademic = (tableProps) => {
+  const { date } = useDataContext();
+  const component = useMemo(
+    () => (
+      <div>
+        <p>
+          {getClouserDateName(
+            date?.date,
+            tableProps.row.original?.chosenAcademicYear
+          ) || "-"}
+        </p>
+      </div>
+    ),
+    [tableProps]
+  );
+
+  return component;
+};
+
 const CellInfo = (tableProps) => {
   const component = useMemo(
     () => (
@@ -206,9 +115,10 @@ const COLUMNS = [
   {
     Header: "Date",
     accessor: "createdAt",
-    width: 104,
-    maxWidth: 104,
+    width: 95,
+    maxWidth: 95,
     Cell: (tableProps) => CellDate(tableProps),
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Student Name",
@@ -228,6 +138,15 @@ const COLUMNS = [
     width: 124,
     maxWidth: 124,
     Cell: (tableProps) => CellArticle(tableProps),
+  },
+  {
+    Header: "Academic Date",
+    accessor: "chosenAcademicYear",
+    disableSortBy: true,
+    width: 134,
+    maxWidth: 134,
+    Cell: (tableProps) => CellAcademic(tableProps),
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Comment",
@@ -255,8 +174,8 @@ const COLUMNS = [
 
 const ArticleTable = ({ lists }) => {
   const [loading, setLoading] = useState({ show: true, error: "" });
-  const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
-  const [filters] = useState(["user", "title", "article"]);
+
+  const [filters] = useState(["title", "documentOwner"]);
   const searchInputRef = useRef(null);
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
@@ -339,7 +258,7 @@ const ArticleTable = ({ lists }) => {
       initialState: {
         sortBy: [
           {
-            id: "submittedDate",
+            id: "createdAt",
             desc: true,
           },
         ],

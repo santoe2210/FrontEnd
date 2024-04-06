@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import ContributionTable from "@/components/MarketingManager/ContributionTable";
 import { getToken } from "@/app/utils/cookie";
+import { getFacultyFromID } from "@/app/utils/common";
 
 async function getAllContribution(userToken) {
   const res = await fetch(`${process.env.API_URL}/file/getAllFiles`, {
@@ -17,9 +18,25 @@ async function getAllContribution(userToken) {
   return res.json();
 }
 
+async function getAllFaculty() {
+  const res = await fetch(`${process.env.API_URL}/faculty/getAllFaculty`, {});
+
+  if (!res.ok) {
+    console.log("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
 async function ContributionsLists() {
   const token = await getToken();
   const contributionLists = await getAllContribution(token);
+  const facultyTypes = await getAllFaculty();
+
+  const newData = contributionLists?.data?.map((item) => ({
+    ...item,
+    faculty: getFacultyFromID(facultyTypes?.faculty, item.faculty),
+  }));
 
   return (
     <>
@@ -34,10 +51,7 @@ async function ContributionsLists() {
         &gt; <span className="font-bold">Contributions</span>{" "}
       </div>
       <div className="py-9 px-12">
-        <ContributionTable
-          lists={contributionLists?.data || []}
-          usrToken={token}
-        />
+        <ContributionTable lists={newData || []} usrToken={token} />
       </div>
     </>
   );

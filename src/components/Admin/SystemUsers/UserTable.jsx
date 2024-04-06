@@ -15,15 +15,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFacultyFromID } from "@/app/utils/common";
 import { useDataContext } from "@/app/context/ContextProvider";
+import { cn } from "@/lib/utils";
 
 function UserTable({ userData }) {
   const { facultyLists } = useDataContext();
   const loading = { show: true, error: "" };
-  const [filters] = useState(["username", "email"]);
+  const [filters] = useState(["name", "email"]);
   const searchInputRef = useRef(null);
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
-
+  console.log(userData);
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 20,
@@ -49,6 +50,20 @@ function UserTable({ userData }) {
     const facultydata = tableProps.row.original.faculty;
     const component = useMemo(
       () => <p>{getFacultyFromID(facultyLists?.faculty, facultydata)}</p>,
+      [tableProps]
+    );
+
+    return component;
+  };
+
+  const CellVerified = (tableProps) => {
+    const verify = tableProps.row.original.verified;
+    const component = useMemo(
+      () => (
+        <p className={cn(verify ? "text-positive" : "text-warning")}>
+          {verify ? "Verified" : "Not Verified"}
+        </p>
+      ),
       [tableProps]
     );
 
@@ -87,6 +102,13 @@ function UserTable({ userData }) {
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellFaculty(tableProps),
+    },
+    {
+      Header: "Status",
+      accessor: "verified",
+      width: 94,
+      maxWidth: 94,
+      Cell: (tableProps) => CellVerified(tableProps),
     },
   ];
 

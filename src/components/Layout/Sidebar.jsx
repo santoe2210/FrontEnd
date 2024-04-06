@@ -40,11 +40,26 @@ async function getAcademicYearLists() {
   return res.json();
 }
 
+async function getAllDate(userToken) {
+  const res = await fetch(`${process.env.API_URL}/dateSetting/dates`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    console.log("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
 export default async function Sidebar() {
   const token = await getToken();
   const profile = token && (await getProfileData(token));
   const facultyTypes = await getAllFaculty();
   const academicYerLists = await getAcademicYearLists();
+  const alldate = await getAllDate(token);
 
   const menusMMR = [
     { id: 0, name: "Dashboard", link: "/marketing-manager" },
@@ -106,6 +121,7 @@ export default async function Sidebar() {
                 profileData={profile}
                 facultyTypes={facultyTypes}
                 academicYerLists={academicYerLists}
+                alldate={alldate}
               />
             ))}
           </ul>

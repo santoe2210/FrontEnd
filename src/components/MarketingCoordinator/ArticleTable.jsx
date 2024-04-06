@@ -37,11 +37,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Label } from "../ui/label";
 import callService from "@/app/utils/callService";
+import { useDataContext } from "@/app/context/ContextProvider";
+import {
+  checkAcademicPassed,
+  getClouserDateDetail,
+  getClouserDateName,
+} from "@/app/utils/common";
 
 function ArticleTable({ lists, usrToken }) {
   const [loading, setLoading] = useState({ show: true, error: "" });
-  const [apiLoading, setApiLoading] = useState({ state: false, msg: "" });
-  const [filters] = useState(["name", "article_name"]);
+
+  const [filters] = useState(["title", "documentOwner"]);
   const searchInputRef = useRef(null);
   const [filterInput, setFilterInput] = useState("");
   const [searchData, setSearchData] = useState([]);
@@ -69,69 +75,12 @@ function ArticleTable({ lists, usrToken }) {
     []
   );
 
-  const DATA = [
-    {
-      id: 0,
-      joined_date: "12-2-2023",
-      name: "Studen 1",
-      article_name: "test.doc",
-      article_link: "https://www.google.com",
-      comment: "good one",
-      approve: true,
-    },
-    {
-      id: 1,
-      joined_date: "12-3-2023",
-      name: "Studen 2",
-      article_name: "test.doc",
-      article_link: "https://www.google.com",
-      comment: "wow wow",
-      approve: true,
-    },
-    {
-      id: 2,
-      joined_date: "2-3-2023",
-      name: "Studen 3",
-      article_name: "test3.doc",
-      article_link: "https://www.google.com",
-      comment: "",
-      approve: false,
-    },
-    {
-      id: 3,
-      joined_date: "12-6-2023",
-      name: "Studen 4",
-      article_name: "test4.doc",
-      article_link: "https://www.google.com",
-      comment: "",
-      approve: false,
-    },
-    {
-      id: 4,
-      joined_date: "1-3-2023",
-      name: "Studen 5",
-      article_name: "test5.doc",
-      article_link: "https://www.google.com",
-      comment: "good one try lah",
-      approve: true,
-    },
-    {
-      id: 5,
-      joined_date: "12-3-2023",
-      name: "Studen 6",
-      article_name: "test6.doc",
-      article_link: "https://www.google.com",
-      comment: "",
-      approve: false,
-    },
-  ];
-
   // temp adding
   useEffect(() => {
-    setOriData(DATA);
+    setOriData(lists);
   }, []);
 
-  const data = lists;
+  const data = useMemo(() => oriData, [oriData]);
 
   // open publish modal
   const openPublishModal = (checkPublish, item) => {
@@ -163,16 +112,7 @@ function ArticleTable({ lists, usrToken }) {
 
   const CellArticle = (tableProps) => {
     const component = useMemo(
-      () => (
-        <div>
-          <Link
-            href={tableProps.row.original.article}
-            className="text-info underline"
-          >
-            {tableProps.row.original.article}
-          </Link>
-        </div>
-      ),
+      () => <p>{tableProps.row.original?.article || "-"}</p>,
       [tableProps]
     );
 
@@ -195,10 +135,17 @@ function ArticleTable({ lists, usrToken }) {
   };
 
   const CellStatus = (tableProps) => {
+    const { date } = useDataContext();
+    const clouserdate = getClouserDateDetail(
+      date?.date,
+      tableProps.row.original?.chosenAcademicYear
+    );
+    const passed = checkAcademicPassed(clouserdate);
     const component = useMemo(
       () => (
         <div>
           <Switch
+            disabled={passed}
             checked={tableProps.row.original.status === "approved" || false}
             onCheckedChange={(value) =>
               openPublishModal(value, tableProps.row.original)
@@ -212,7 +159,33 @@ function ArticleTable({ lists, usrToken }) {
     return component;
   };
 
+  const CellAcademic = (tableProps) => {
+    const { date } = useDataContext();
+    const component = useMemo(
+      () => (
+        <div>
+          <p>
+            {getClouserDateName(
+              date?.date,
+              tableProps.row.original?.chosenAcademicYear
+            ) || "-"}
+          </p>
+        </div>
+      ),
+      [tableProps]
+    );
+
+    return component;
+  };
+
   const CellInfo = (tableProps) => {
+    const { date } = useDataContext();
+    const clouserdate = getClouserDateDetail(
+      date?.date,
+      tableProps.row.original?.chosenAcademicYear
+    );
+    const passed = checkAcademicPassed(clouserdate);
+
     const component = useMemo(
       () => (
         <div className="flex space-x-2 items-center">
@@ -224,6 +197,7 @@ function ArticleTable({ lists, usrToken }) {
           </Link>
           <Button
             variant="ghost"
+            disabled={passed}
             onClick={() => openCommentModal(tableProps.row.original)}
           >
             <FontAwesomeIcon icon={faEdit} className=" text-info" />
@@ -240,9 +214,10 @@ function ArticleTable({ lists, usrToken }) {
     {
       Header: "Date",
       accessor: "createdAt",
-      width: 104,
-      maxWidth: 104,
+      width: 95,
+      maxWidth: 95,
       Cell: (tableProps) => CellDate(tableProps),
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Student Name",
@@ -262,6 +237,15 @@ function ArticleTable({ lists, usrToken }) {
       width: 124,
       maxWidth: 124,
       Cell: (tableProps) => CellArticle(tableProps),
+    },
+    {
+      Header: "Academic Date",
+      accessor: "chosenAcademicYear",
+      disableSortBy: true,
+      width: 134,
+      maxWidth: 134,
+      Cell: (tableProps) => CellAcademic(tableProps),
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Comment",
@@ -366,31 +350,22 @@ function ArticleTable({ lists, usrToken }) {
 
   const handleFilterDropdown = useCallback((value) => {
     if (value === "All") {
-      setFilter("comment", undefined);
+      setFilter("comments", undefined);
+      setOriData(lists);
       setDropdownFilter("All");
     } else if (value === "Without Comment") {
-      // setFilter("comment", (rows) => {
-      //   return rows.filter((row) => {
-      //     const commentValue = row.values.comment;
-      //     return (
-      //       commentValue === "" ||
-      //       commentValue === null ||
-      //       /^\s*$/.test(commentValue)
-      //     );
-      //   });
-      // });
+      setOriData(lists.filter((item) => !item.comments));
       setDropdownFilter("Without Comment");
     } else if (value === "Without Comment 14 Days") {
-      const cutoffDate = new Date(); // Get today's date
-      cutoffDate.setDate(cutoffDate.getDate() - 14); // Subtract 14 days
-      setFilter("comment", (rows = []) => {
-        return rows.filter((row) => {
-          // Filter rows with comment older than 14 days or empty comment
-          return (
-            !row.values.comment || new Date(row.values.comment) <= cutoffDate
-          );
-        });
-      });
+      const cutoffDate = moment(); // Get today's date
+
+      setOriData(
+        lists.filter(
+          (item) =>
+            !item.comments && cutoffDate.diff(item.createdAt, "days") <= 14
+        )
+      );
+
       setDropdownFilter("Without Comment 14 Days");
     }
   }, []);
@@ -427,8 +402,6 @@ function ArticleTable({ lists, usrToken }) {
   );
 
   const changePublishStatus = async () => {
-    console.log(publshData);
-
     const response = await callService(
       "PATCH",
       `${process.env.API_URL}/file/updateFileStatus/${publshData?.itemData?._id}/`,
@@ -472,7 +445,7 @@ function ArticleTable({ lists, usrToken }) {
       if (response.status === 200) {
         const newData = [];
         oriData.forEach((entry) => {
-          if (entry.id === commentData.itemData.id) {
+          if (entry._id === commentData.itemData._id) {
             const singleItem = entry;
             singleItem.comments = commentData.text;
             newData.push(singleItem);
@@ -499,7 +472,7 @@ function ArticleTable({ lists, usrToken }) {
       if (response.status === 201) {
         const newData = [];
         oriData.forEach((entry) => {
-          if (entry.id === commentData.itemData.id) {
+          if (entry._id === commentData.itemData._id) {
             const singleItem = entry;
             singleItem.comments = commentData.text;
             newData.push(singleItem);

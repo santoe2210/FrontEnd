@@ -14,7 +14,7 @@ async function getAcademicData(userToken) {
   if (!res.ok) {
     console.log("Failed to fetch data");
   }
-
+  console.log("calling api");
   return res.json();
 }
 
@@ -47,7 +47,7 @@ const page = async () => {
       item.academicYear
     ),
   }));
-
+  console.log(newData?.length, "new");
   if (!academicData) {
     return <p>There is no information.</p>;
   }
