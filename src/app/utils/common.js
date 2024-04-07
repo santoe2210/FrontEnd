@@ -16,7 +16,7 @@ export function routePaths() {
 export function getClouserDateName(data, id) {
   const filterItem = data?.filter((item) => item._id === id);
 
-  if (filterItem.length > 0) {
+  if (filterItem?.length > 0) {
     const name = `${moment(filterItem[0].closureDate).format(
       "DD/MMM/YYYY"
     )} to ${moment(filterItem[0].finalClosureDate).format("DD/MMM/YYYY")}`;
@@ -27,17 +27,17 @@ export function getClouserDateName(data, id) {
 }
 
 export function getClouserDateDetail(data, id) {
-  const filterItem = data.filter((item) => item._id === id);
-  return filterItem[0];
+  const filterItem = data?.filter((item) => item._id === id);
+  return filterItem[0] || [];
 }
 
 export function getYearNumberFromID(data, id) {
-  const filterItem = data.filter((item) => item._id === id);
+  const filterItem = data?.filter((item) => item._id === id);
   return filterItem[0]?.year;
 }
 
 export function getFacultyFromID(data, id) {
-  const filterItem = data.filter((item) => item._id === id);
+  const filterItem = data?.filter((item) => item._id === id);
   return filterItem[0]?.name;
 }
 
@@ -94,6 +94,20 @@ export function checkAcademicPassed(data) {
   const currentDate = moment();
 
   if (currentDate.isAfter(finalClosureDate)) {
+    return true;
+  }
+  return false;
+}
+
+export function passed14Days(date) {
+  const providedDate = moment(date);
+  const endDate = providedDate.clone().add(14, "days");
+
+  // Current date
+  const currentDate = moment();
+
+  // Compare the current date with the end date
+  if (currentDate.isAfter(endDate)) {
     return true;
   }
   return false;

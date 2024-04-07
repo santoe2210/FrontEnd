@@ -42,6 +42,7 @@ import {
   checkAcademicPassed,
   getClouserDateDetail,
   getClouserDateName,
+  passed14Days,
 } from "@/app/utils/common";
 
 function ArticleTable({ lists, usrToken }) {
@@ -357,13 +358,8 @@ function ArticleTable({ lists, usrToken }) {
       setOriData(lists.filter((item) => !item.comments));
       setDropdownFilter("Without Comment");
     } else if (value === "Without Comment 14 Days") {
-      const cutoffDate = moment(); // Get today's date
-
       setOriData(
-        lists.filter(
-          (item) =>
-            !item.comments && cutoffDate.diff(item.createdAt, "days") <= 14
-        )
+        lists.filter((item) => !item.comments && passed14Days(item.createdAt))
       );
 
       setDropdownFilter("Without Comment 14 Days");
@@ -416,9 +412,9 @@ function ArticleTable({ lists, usrToken }) {
     if (response.status === 200) {
       const newData = [];
       oriData.forEach((entry) => {
-        if (entry.id === publshData.itemData.id) {
+        if (entry._id === publshData.itemData._id) {
           const singleItem = entry;
-          singleItem.approve = publshData.state ? "approved" : "submitted";
+          singleItem.status = publshData.state ? "approved" : "submitted";
           newData.push(singleItem);
         } else {
           newData.push(entry);
