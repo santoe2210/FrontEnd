@@ -28,7 +28,10 @@ export function getClouserDateName(data, id) {
 
 export function getClouserDateDetail(data, id) {
   const filterItem = data?.filter((item) => item._id === id);
-  return filterItem[0] || [];
+  if (filterItem) {
+    return filterItem[0] || [];
+  }
+  return [];
 }
 
 export function getYearNumberFromID(data, id) {

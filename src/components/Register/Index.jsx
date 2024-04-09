@@ -84,6 +84,7 @@ function Index() {
       faculty: values.facultyType,
       academicYear: values.academicYear,
       termsAgreed: true,
+      from: "user",
     };
 
     const response = await callService(

@@ -72,6 +72,7 @@ function AddUserForm() {
       faculty: values.faculty,
       academicYear: values.academicYear,
       termsAgreed: true,
+      from: "admin",
     };
 
     const response = await callService(
