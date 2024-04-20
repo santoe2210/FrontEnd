@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "../ui/button";
+import { useDataContext } from "@/app/context/ContextProvider";
 
-function ClosureDateTable() {
+function ClosureDateTable({ oriData }) {
+  const { academicYearLists } = useDataContext();
   const loading = { show: true, error: "" };
   const [dropdownFilter, setDropdownFilter] = useState("All");
   const [filters] = useState(["academicYear"]);
@@ -35,28 +37,7 @@ function ClosureDateTable() {
     []
   );
 
-  const DATA = [
-    {
-      id: "0",
-      academicYear: "2022",
-      closureDate: "2022-1-16",
-      finalClosureDate: "2022-5-20",
-    },
-    {
-      id: "1",
-      academicYear: "2023",
-      closureDate: "2023-11-16",
-      finalClosureDate: "2023-12-18",
-    },
-    {
-      id: "2",
-      academicYear: "2024",
-      closureDate: "2024-1-16",
-      finalClosureDate: "2024-3-11",
-    },
-  ];
-
-  const data = useMemo(() => DATA || [], []);
+  const data = useMemo(() => oriData, [oriData]);
 
   const CellDate = (tableProps, x) => {
     const component = useMemo(
@@ -65,7 +46,7 @@ function ClosureDateTable() {
           x === "closureDate"
             ? tableProps.row.original.closureDate
             : tableProps.row.original.finalClosureDate
-        ).format("DD MMM YYYY HH:mm"),
+        ).format("DD MMM YYYY"),
       [tableProps]
     );
 
@@ -137,6 +118,12 @@ function ClosureDateTable() {
       defaultColumn,
       globalFilter: ourGlobalFilterFunction,
       initialState: {
+        sortBy: [
+          {
+            id: "date",
+            desc: true,
+          },
+        ],
         pageSize: 10,
       },
     },

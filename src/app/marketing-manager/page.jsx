@@ -1,11 +1,10 @@
 import React from "react";
-import MMRDashboard from "@/components/MarketingManager/Index";
+import AdminDashboard from "@/components/Dashboard/AdminDashboard";
 
 function MarketingManager() {
   return (
     <div>
-      <h1>Marketing manager</h1>
-      <MMRDashboard />
+      <AdminDashboard />
     </div>
   );
 }

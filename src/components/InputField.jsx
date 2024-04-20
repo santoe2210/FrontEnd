@@ -24,7 +24,7 @@ function InputField({
   return (
     <div className="relative mt-2">
       <FormField
-        control={form.control}      
+        control={form.control}
         name={name}
         render={({ field }) => (
           <FormItem>
@@ -34,6 +34,7 @@ function InputField({
                 type={showPassword ? "text" : type}
                 placeholder={placeholder}
                 {...field}
+                multiple
               />
             </FormControl>
             <FormMessage />

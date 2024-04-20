@@ -12,33 +12,15 @@ import SelectField from "../SelectField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import CheckField from "../CheckField";
+import callService from "@/app/utils/callService";
+import { useDataContext } from "@/app/context/ContextProvider";
+import { reformatListFaculty, reformatListYear } from "@/app/utils/common";
 
 function Index() {
   const [apiLoading, setApiLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
-
-  const faultys = [
-    {
-      id: 0,
-      name: "Faulty of Engineering",
-      value: "FOE",
-    },
-    {
-      id: 1,
-      name: "Faulty of Science",
-      value: "FOS",
-    },
-    {
-      id: 2,
-      name: "Faulty of Art",
-      value: "FOA",
-    },
-    {
-      id: 3,
-      name: "Faulty of Medicine",
-      value: "FOM",
-    },
-  ];
+  const { facultyLists, academicYearLists } = useDataContext();
 
   const formSchema = z
     .object({
@@ -46,11 +28,13 @@ function Index() {
         .string()
         .trim()
         .min(1, { message: "This field is required." }),
+      role: z.string().trim().min(1, { message: "This field is required." }),
       email: z
         .string()
         .min(1, { message: "This field is required" })
         .email("This is not a valid email."),
       facultyType: z.string().min(1, { message: "This field is reqiured." }),
+      academicYear: z.string().min(1, { message: "This field is reqiured." }),
       password: z
         .string()
         .min(8, { message: "Password must be at least 8 characters." })
@@ -82,6 +66,8 @@ function Index() {
       username: "",
       email: "",
       password: "",
+      role: "",
+      academicYear: "",
       confirmpassword: "",
       facultyType: "",
       accept: false,
@@ -89,8 +75,31 @@ function Index() {
   });
 
   async function handleLogin(values) {
-    console.log(values, "testing");
-    router.push("/register-completed");
+    setApiLoading(true);
+    const jsonData = {
+      name: values.username,
+      email: values.email,
+      role: values.role.toLowerCase(),
+      password: values.password,
+      faculty: values.facultyType,
+      academicYear: values.academicYear,
+      termsAgreed: true,
+      from: "user",
+    };
+
+    const response = await callService(
+      "POST",
+      `${process.env.API_URL}/register/`,
+      jsonData,
+      null
+    );
+
+    if (response.status === 201) {
+      router.push("/register-completed");
+    } else if (response.status === 400) {
+      setErrMsg("Email is already registered.");
+    }
+    setApiLoading(false);
   }
 
   // function render icon check validate password
@@ -152,10 +161,22 @@ function Index() {
           placeholder="abc@gmail.com"
         />
         <SelectField
+          label="Role"
+          name="role"
+          form={form}
+          data={[{ id: 1, name: "Guest", value: "guest" }]}
+        />
+        <SelectField
+          label="Academic Year"
+          name="academicYear"
+          form={form}
+          data={reformatListYear(academicYearLists?.year)}
+        />
+        <SelectField
           label="Faculty Type"
           name="facultyType"
           form={form}
-          data={faultys}
+          data={reformatListFaculty(facultyLists?.faculty)}
         />
         <InputField
           label="Password"
@@ -215,12 +236,15 @@ function Index() {
         <CheckField
           name="accept"
           form={form}
-          label="Please accept"
+          label="Please accept the terms before registering."
           className="mt-6"
         />
         <Button disabled={apiLoading} type="submit" className="w-full mt-8">
           {apiLoading ? "Please wait" : "Register"}
         </Button>
+        <p className="text-center text-[12px] text-negative mt-2">
+          {errMsg && errMsg}
+        </p>
         <p className="text-center p3 mt-4">
           Already have an account?{" "}
           <Link href="/login" className="text-info">

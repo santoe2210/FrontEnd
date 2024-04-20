@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import InputField from "@/components/InputField";
 import { Form } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import callService from "@/app/utils/callService";
 
 const formSchema = z.object({
   email: z
@@ -17,13 +18,23 @@ const formSchema = z.object({
 });
 
 const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
   const [apiLoading, setApiLoading] = useState(false);
   const router = useRouter();
 
   const handleEmailSubmit = async (values) => {
-    console.log(values.email);
-    router.push(`/reset-password/${values.email}`);
+    setApiLoading(true);
+    const response = await callService(
+      "POST",
+      `${process.env.API_URL}/forgotPassword`,
+      {
+        email: values.email,
+      },
+      null
+    );
+    if (response.status === 201) {
+      router.push("/forgot-password-completed/");
+    }
+    setApiLoading(false);
   };
 
   const form = useForm({
@@ -36,7 +47,7 @@ const ForgotPasswordPage = () => {
   return (
     <div className="max-w-[600px] mx-auto">
       <h3 className="text-primary font-bold">Forgot Your Password?</h3>
-      <p>
+      <p className="p3">
         Enter the email address associated with your account and we’ll send you
         a link to reset your password.
       </p>

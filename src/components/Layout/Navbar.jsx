@@ -16,7 +16,7 @@ async function Navbar() {
                 href="/"
                 className="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg focus:outline-none focus:shadow-outline"
               >
-                logo
+                UniVoice Magazine
               </Link>
             </div>
             <nav className="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row mr-[25px]">
