@@ -236,7 +236,7 @@ function Index() {
         <CheckField
           name="accept"
           form={form}
-          label="Please accept"
+          label="Please accept the terms before registering."
           className="mt-6"
         />
         <Button disabled={apiLoading} type="submit" className="w-full mt-8">

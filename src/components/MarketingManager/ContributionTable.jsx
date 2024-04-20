@@ -162,16 +162,27 @@ function ContributionTable({ lists, usrToken }) {
     return component;
   };
 
+  const CellAcademic = (tableProps) => {
+    const { date } = useDataContext();
+    const component = useMemo(
+      () => (
+        <div>
+          <p>
+            {getClouserDateName(
+              date?.date,
+              tableProps.row.original?.chosenAcademicYear
+            ) || "-"}
+          </p>
+        </div>
+      ),
+      [tableProps]
+    );
+
+    return component;
+  };
+
   const columns = useMemo(
     () => [
-      {
-        Header: "Date",
-        accessor: "createdAt",
-        width: 94,
-        maxWidth: 94,
-        Cell: (tableProps) => CellDate(tableProps),
-        style: { whiteSpace: "unset" },
-      },
       {
         Header: "Student Name",
         accessor: "documentOwner",
@@ -192,12 +203,22 @@ function ContributionTable({ lists, usrToken }) {
         width: 124,
         maxWidth: 124,
         Cell: (tableProps) => CellArticle(tableProps),
+        style: { whiteSpace: "unset" },
       },
       {
         Header: "Faculty Type",
         accessor: "faculty",
         width: 134,
         maxWidth: 134,
+        style: { whiteSpace: "unset" },
+      },
+      {
+        Header: "Academic Date",
+        accessor: "chosenAcademicYear",
+        disableSortBy: true,
+        width: 134,
+        maxWidth: 134,
+        Cell: (tableProps) => CellAcademic(tableProps),
         style: { whiteSpace: "unset" },
       },
       {

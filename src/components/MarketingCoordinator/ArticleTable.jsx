@@ -231,6 +231,7 @@ function ArticleTable({ lists, usrToken }) {
       accessor: "title",
       width: 134,
       maxWidth: 134,
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Article",
@@ -238,6 +239,7 @@ function ArticleTable({ lists, usrToken }) {
       width: 124,
       maxWidth: 124,
       Cell: (tableProps) => CellArticle(tableProps),
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Academic Date",

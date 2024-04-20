@@ -13,7 +13,6 @@ import {
 
 import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 const dateData = [
   {
@@ -33,12 +32,6 @@ const dateData = [
     academicYear: "2024",
     closureDate: "2024-1-16",
     finalClosureDate: "2024-3-11",
-  },
-  {
-    id: "3",
-    academicYear: "2025",
-    closureDate: "2025-1-16",
-    finalClosureDate: "2025-3-11",
   },
 ];
 
@@ -125,7 +118,7 @@ const MainDashboard = ({ lists, userLists }) => {
         <DashboardCard
           title="Guest"
           value={userLists?.guest}
-          info="20% more staff than last year"
+          info="10% more staff than last year"
           icon={faChartBar}
         />
         <DashboardCard
@@ -137,13 +130,13 @@ const MainDashboard = ({ lists, userLists }) => {
         <DashboardCard
           title="Marketing Coordinator"
           value={userLists["marketing coordinator"]}
-          info="20% more staff than last year"
+          info="13% more staff than last year"
           icon={faChartBar}
         />
         <DashboardCard
           title="Marketing Manager"
           value={userLists["marketing manager"]}
-          info="20% more staff than last year"
+          info="2% more staff than last year"
           icon={faChartBar}
         />
       </div>

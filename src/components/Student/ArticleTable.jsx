@@ -91,16 +91,7 @@ const CellInfo = (tableProps) => {
 
 const CellArticle = (tableProps) => {
   const component = useMemo(
-    () => (
-      <div>
-        <Link
-          href={tableProps.row.original.article}
-          className="text-info underline"
-        >
-          {tableProps.row.original.article}
-        </Link>
-      </div>
-    ),
+    () => <p>{tableProps.row.original.article}</p>,
     [tableProps]
   );
 
