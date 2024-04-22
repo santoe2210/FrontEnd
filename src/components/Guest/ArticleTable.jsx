@@ -131,6 +131,7 @@ const COLUMNS = [
     accessor: "title",
     width: 134,
     maxWidth: 134,
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Article",
@@ -138,6 +139,7 @@ const COLUMNS = [
     width: 124,
     maxWidth: 124,
     Cell: (tableProps) => CellArticle(tableProps),
+    style: { whiteSpace: "unset" },
   },
   {
     Header: "Academic Date",

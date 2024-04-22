@@ -401,7 +401,7 @@ function ArticleTable({ lists, usrToken }) {
 
   const changePublishStatus = async () => {
     const response = await callService(
-      "PATCH",
+      "POST",
       `${process.env.API_URL}/file/updateFileStatus/${publshData?.itemData?._id}/`,
       {
         title: publshData.itemData?.title,
@@ -430,7 +430,7 @@ function ArticleTable({ lists, usrToken }) {
   const changeComment = async () => {
     if (commentData?.itemData?.commentId) {
       const response = await callService(
-        "PATCH",
+        "POST",
         `${process.env.API_URL}/comment/editComment/${commentData?.itemData?.commentId}/`,
         {
           comment: commentData.text,

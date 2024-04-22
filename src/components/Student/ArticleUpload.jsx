@@ -77,8 +77,8 @@ function ArticleUpload({ userToken, data = {} }) {
 
     if (id) {
       const response = await callService(
-        "PATCH",
-        `${process.env.API_URL}/file/update/${id}`,
+        "POST",
+        `${process.env.API_URL}/file/update/${id}/`,
         {
           chosenAcademicYear: values.academicYear,
           title: values.articleName,
