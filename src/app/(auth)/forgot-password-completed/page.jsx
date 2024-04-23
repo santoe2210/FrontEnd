@@ -4,10 +4,10 @@ import React from "react";
 
 function ForgotCompeleted() {
   return (
-    <div className="max-w-[768px] mx-auto text-center">
+    <div className="max-w-[768px] mx-auto smmx:mx-4 text-center">
       <FontAwesomeIcon
         icon={faCircleCheck}
-        className="text-[100px] text-positive"
+        className="text-[100px] smmx:text-[70px] text-positive"
       />
 
       <h4 className="mt-7 font-bold">Reset Password Email Sent</h4>

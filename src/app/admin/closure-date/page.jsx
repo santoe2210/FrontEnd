@@ -65,7 +65,7 @@ const page = async () => {
         </Link>{" "}
         &gt; <span className="font-bold">Academic Closure Dates</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 smmx:px-5">
         <ClosureDateTable oriData={newData || {}} />
       </div>
     </>

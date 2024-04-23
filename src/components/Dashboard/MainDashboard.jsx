@@ -95,10 +95,10 @@ const MainDashboard = ({ lists, userLists }) => {
   }));
 
   return (
-    <div className="container py-5">
-      <div className="flex items-center justify-between pb-5">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <div className="w-[150px]">
+    <div className="container smmx:!px-4 py-5">
+      <div className="flex smmx:flex-col items-center smmx:items-start justify-between pb-5">
+        <h2 className="font-bold tracking-tight">Dashboard</h2>
+        <div className="w-[150px] smmx:w-full">
           <Label>Academic Year</Label>
           <Select onValueChange={(year) => setYear(year)}>
             <SelectTrigger>

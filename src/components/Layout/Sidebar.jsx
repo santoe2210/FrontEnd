@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import NavLink from "./NavLink";
 import { getToken } from "@/app/utils/cookie";
 import { useDataContext } from "@/app/context/ContextProvider";
+import { getMenus } from "@/app/utils/common";
 
 async function getProfileData(userToken) {
   const res = await fetch(`${process.env.API_URL}/profile/me`, {
@@ -61,59 +62,18 @@ export default async function Sidebar() {
   const academicYerLists = await getAcademicYearLists();
   const alldate = await getAllDate(token);
 
-  const menusMMR = [
-    { id: 0, name: "Dashboard", link: "/marketing-manager" },
-    { id: 1, name: "Contributions", link: "/marketing-manager/contributions" },
-  ];
-
-  const menusAdmin = [
-    { id: 0, name: "Dashboard", link: "/admin" },
-    { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
-    {
-      id: 3,
-      name: "System Users",
-      link: "/admin/system-users",
-    },
-  ];
-
-  const menusMCR = [
-    { id: 0, name: "Dashboard", link: "/marketing-coordinator" },
-    { id: 1, name: "Articles", link: "/marketing-coordinator/articles" },
-  ];
-  const menusGuest = [
-    { id: 0, name: "Dashboard", link: "/guest" },
-    { id: 1, name: "Articles", link: "/guest/articles" },
-  ];
-  const menusStudent = [{ id: 0, name: "Articles", link: "/student/articles" }];
-
-  const getMenus = () => {
-    if (profile?.data?.role === "admin") {
-      return menusAdmin;
-    }
-    if (profile?.data?.role === "marketing coordinator") {
-      return menusMCR;
-    }
-    if (profile?.data?.role === "guest") {
-      return menusGuest;
-    }
-    if (profile?.data?.role === "student") {
-      return menusStudent;
-    }
-    return menusMMR;
-  };
-
   return (
     <>
       <aside
         className={cn(
           !token && "hidden",
-          "w-56 fixed left-0 top-20 bg-white sidebar border-r-[1px] h-full"
+          "w-56 mdmax992:w-0 fixed left-0 top-20 bg-white sidebar border-r-[1px] h-full"
         )}
         aria-label="Sidebar"
       >
         <div className="overflow-y-auto rounded h-[calc(100vh-115px)]">
           <ul>
-            {getMenus().map((item) => (
+            {getMenus(profile?.data).map((item) => (
               <NavLink
                 key={item.id}
                 name={item.name}

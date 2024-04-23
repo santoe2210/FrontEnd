@@ -24,7 +24,7 @@ async function ArticleDetail({ params }) {
 
   return (
     <>
-      <div className="h-[60px] bg-white w-full px-5 py-5 p3">
+      <div className="h-[60px] smmx:h-auto bg-white w-full px-5 py-5 p3">
         <Link
           href="/marketing-coordinator"
           className="hover:text-info hover:underline transition"
@@ -42,7 +42,7 @@ async function ArticleDetail({ params }) {
         </Link>{" "}
         &gt; <span className="font-bold">{articleId}</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 mdmx:px-5">
         <ArticleView data={artData?.updateData || []} />
       </div>
     </>

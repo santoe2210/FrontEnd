@@ -34,7 +34,7 @@ const StudentArticlesPage = async () => {
         &gt; <span className="font-bold">Articles</span>{" "}
       </div>
 
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 mdmax992:px-5">
         <ArticleTable lists={contributionLists?.data || []} />
       </div>
     </>

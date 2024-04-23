@@ -7,7 +7,7 @@ const SetClosureDatePage = async () => {
 
   return (
     <>
-      <div className="h-[60px] bg-white w-full px-5 py-5 p3">
+      <div className="h-[60px] smmx:h-auto bg-white w-full px-5 py-5 p3">
         <Link
           href="/admin"
           className="hover:text-info hover:underline transition"
@@ -25,7 +25,7 @@ const SetClosureDatePage = async () => {
         </Link>{" "}
         &gt; <span className="font-bold"> Set Closure Date</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 smmx:px-5">
         <SetClouserDate userToken={token} />
       </div>
     </>

@@ -292,12 +292,12 @@ const ArticleTable = ({ lists }) => {
   };
   return (
     <>
-      <div className="mb-8 flex justify-between items-end">
+      <div className="mb-8 flex justify-between items-end mdmx:flex-col mdmx:items-start mdmx:space-y-5">
         <form
           noValidate
           onSubmit={handleOnSubmitInput}
           autoComplete="off"
-          className="flex items-end xlmx:flex-col"
+          className="flex items-end"
         >
           <div className="mt-1 mr-4 relative rounded-md">
             <label
@@ -313,7 +313,7 @@ const ArticleTable = ({ lists }) => {
               value={filterInput}
               ref={searchInputRef}
               onChange={handleFilterChange}
-              className="default-input min-w-[350px]"
+              className="default-input min-w-[350px] smmx:min-w-[150px]"
               placeholder="Title, Author"
             />
           </div>

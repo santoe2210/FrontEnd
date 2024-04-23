@@ -171,11 +171,11 @@ function ClosureDateTable({ oriData }) {
 
   return (
     <>
-      <div className="mb-8 flex justify-between items-end">
+      <div className="mb-8 flex smmx:flex-col justify-between items-end smmx:items-start smmx:space-y-5">
         <div>
           <p className="p3 font-bold mb-1">Academic Year</p>
           <Select value={dropdownFilter} onValueChange={handleFilterDropdown}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] smmx:w-[200px]">
               <SelectValue placeholder="Select a fruit" />
             </SelectTrigger>
             <SelectContent>

@@ -23,7 +23,7 @@ async function UserLists() {
 
   return (
     <>
-      <div className="h-[60px] bg-white w-full px-5 py-5 p3">
+      <div className="h-[60px] smmx:h-auto bg-white w-full px-5 py-5 p3">
         <Link
           href="/admin"
           className="hover:text-info hover:underline transition"
@@ -33,7 +33,7 @@ async function UserLists() {
         </Link>{" "}
         &gt; <span className="font-bold">Users</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 smmx:px-5">
         <UserTable userData={userData?.students} />
       </div>
     </>

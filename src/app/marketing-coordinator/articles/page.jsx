@@ -25,7 +25,7 @@ async function Articles() {
   // const academicYerLists = await getAcademicYearLists(token);
   return (
     <>
-      <div className="h-[60px] bg-white w-full px-5 py-5 p3">
+      <div className="h-[60px] smmx:h-auto bg-white w-full px-5 py-5 p3">
         <Link
           href="/marketing-manager"
           className="hover:text-info hover:underline transition"
@@ -35,7 +35,7 @@ async function Articles() {
         </Link>{" "}
         &gt; <span className="font-bold">Articles</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 mdmax992:px-5">
         <ArticleTable lists={contributionLists?.data || []} usrToken={token} />
       </div>
     </>

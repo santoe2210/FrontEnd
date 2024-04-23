@@ -51,32 +51,32 @@
 
 @layer base {
   h1 {
-    @apply text-4xl;
+    @apply text-4xl smmx:text-3xl;
   }
   h2 {
-    @apply text-4xl;
+    @apply text-4xl smmx:text-3xl;
   }
 
   h3 {
-    @apply text-3xl;
+    @apply text-3xl smmx:text-2xl;
   }
   h4 {
-    @apply text-2xl;
+    @apply text-2xl smmx:text-xl;
   }
 
   h5 {
-    @apply text-xl;
+    @apply text-xl smmx:text-lg;
   }
   h6 {
-    @apply text-lg;
+    @apply text-lg smmx:text-md;
   }
 
   .p1 {
-    @apply text-md;
+    @apply text-md smmx:text-base;
   }
 
   .p2 {
-    @apply text-base;
+    @apply text-base smmx:text-sm;
   }
 
   .p3 {

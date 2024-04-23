@@ -5,7 +5,7 @@ import FileViewer from "react-file-viewer";
 
 function ArticleView({ data }) {
   return (
-    <div className="bg-white p-10 rounded-md">
+    <div className="bg-white p-10 mdmx:p-4 rounded-md">
       <h6 className="font-bold">Article Title</h6>
       <p className="p2-regular-16 mb-5">{data?.data?.title}</p>
       <h6 className="font-bold">Article Author</h6>

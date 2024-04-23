@@ -17,7 +17,7 @@ const UplaodArticlePage = async () => {
         </Link>{" "}
         &gt; <span className="font-bold">Upload</span>{" "}
       </div>
-      <div className="max-w-[600px] mx-auto my-12">
+      <div className="max-w-[600px] mx-auto mdmx:mx-5 my-12">
         <ArticleUpload userToken={token} />
       </div>
     </>

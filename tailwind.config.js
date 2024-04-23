@@ -159,6 +159,41 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      screens: {
+        min1700: { min: "1700px" },
+        "2xlmx": { max: "1535px" },
+        // => @media (max-width: 1535px) { ... }
+
+        xxlmx: { max: "1359px" },
+
+        xlmx: { max: "1279px" },
+        // => @media (max-width: 1279px) { ... }
+
+        lgmax1053: { max: "1053px" },
+
+        lgmx: { max: "1023px" },
+        // => @media (max-width: 1023px) { ... }
+
+        mdmax992: { max: "992px" },
+
+        mdmin800: { min: "800px" },
+
+        mdmax800: { max: "800px" },
+
+        mdmin850: { min: "850px" },
+
+        mdmax850: { max: "850px" },
+
+        mdmx: { max: "767px" },
+        // => @media (max-width: 767px) { ... }
+
+        smmx: { max: "599px" },
+        // => @media (max-width: 639px) { ... }
+
+        xsmmx: { max: "479px" },
+
+        xxsmmx: { max: "400px" },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

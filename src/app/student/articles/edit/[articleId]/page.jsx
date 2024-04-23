@@ -24,7 +24,7 @@ async function ArticleEdit({ params }) {
 
   return (
     <>
-      <div className="h-[60px] bg-white w-full px-5 py-5 p3">
+      <div className="h-[60px] smmx:h-auto bg-white w-full px-5 py-5 p3">
         <Link
           href="/student/articles"
           className="hover:text-info hover:underline transition"
@@ -42,7 +42,7 @@ async function ArticleEdit({ params }) {
         </Link>{" "}
         &gt; <span className="font-bold">{articleId}</span>{" "}
       </div>
-      <div className="max-w-[600px] mx-auto my-12">
+      <div className="max-w-[600px] mx-auto mdmx:mx-4 my-12">
         <ArticleUpload userToken={token} data={artData?.updateData || []} />
       </div>
     </>

@@ -26,7 +26,7 @@ const AddUser = async () => {
         </Link>{" "}
         &gt; <span className="font-bold">Add User</span>{" "}
       </div>
-      <div className="max-w-[600px] mx-auto my-12">
+      <div className="max-w-[600px] mx-auto smmx:mx-4 my-12">
         <AddUserForm />
       </div>
     </>

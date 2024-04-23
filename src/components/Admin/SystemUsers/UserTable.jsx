@@ -77,24 +77,28 @@ function UserTable({ userData }) {
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellDate(tableProps),
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Username",
       accessor: "name",
       width: 134,
       maxWidth: 134,
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Email",
       accessor: "email",
       width: 124,
       maxWidth: 124,
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Role",
       accessor: "role",
       width: 104,
       maxWidth: 104,
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Faculty Type",
@@ -102,6 +106,7 @@ function UserTable({ userData }) {
       width: 104,
       maxWidth: 104,
       Cell: (tableProps) => CellFaculty(tableProps),
+      style: { whiteSpace: "unset" },
     },
     {
       Header: "Status",
@@ -109,6 +114,7 @@ function UserTable({ userData }) {
       width: 94,
       maxWidth: 94,
       Cell: (tableProps) => CellVerified(tableProps),
+      style: { whiteSpace: "unset" },
     },
   ];
 
@@ -211,12 +217,12 @@ function UserTable({ userData }) {
 
   return (
     <>
-      <div className="mb-8 flex justify-between items-end">
+      <div className="mb-8 flex mdmx:flex-col justify-between items-end mdmx:items-start mdmx:space-y-5">
         <form
           noValidate
           onSubmit={handleOnSubmitInput}
           autoComplete="off"
-          className="flex items-end xlmx:flex-col"
+          className="flex items-end"
         >
           <div className="mt-1 mr-4 relative rounded-md">
             <label
@@ -232,11 +238,11 @@ function UserTable({ userData }) {
               value={filterInput}
               ref={searchInputRef}
               onChange={handleFilterChange}
-              className="default-input min-w-[350px]"
+              className="default-input min-w-[350px] smmx:min-w-[150px]"
               placeholder="Name, Email"
             />
           </div>
-          <Button type="submit" className="mr-9">
+          <Button type="submit" className="mr-9 smmx:mr-0">
             Search
           </Button>
         </form>

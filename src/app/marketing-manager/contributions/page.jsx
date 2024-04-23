@@ -50,7 +50,7 @@ async function ContributionsLists() {
         </Link>{" "}
         &gt; <span className="font-bold">Contributions</span>{" "}
       </div>
-      <div className="py-9 px-12">
+      <div className="py-9 px-12 mdmax992:px-5">
         <ContributionTable lists={newData || []} usrToken={token} />
       </div>
     </>

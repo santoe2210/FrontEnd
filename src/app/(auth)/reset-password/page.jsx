@@ -96,8 +96,8 @@ function ResetPasswordPage() {
     },
   });
   return (
-    <div className="max-w-[600px] mx-auto">
-      <h3 className="text-primary font-bold">Change Your Password</h3>
+    <div className="max-w-[600px] mx-auto mdmx:mx-4">
+      <h4 className="text-primary font-bold">Change Your Password</h4>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handlePasswordSubmit)}

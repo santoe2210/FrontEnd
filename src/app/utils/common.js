@@ -135,3 +135,44 @@ export function splitBase64IntoChunks(base64Data, chunkSize) {
 
   return chunks;
 }
+
+const menusMMR = [
+  { id: 0, name: "Dashboard", link: "/marketing-manager" },
+  { id: 1, name: "Contributions", link: "/marketing-manager/contributions" },
+];
+
+const menusAdmin = [
+  { id: 0, name: "Dashboard", link: "/admin" },
+  { id: 1, name: "Academic Clouser Date", link: "/admin/closure-date" },
+  {
+    id: 3,
+    name: "System Users",
+    link: "/admin/system-users",
+  },
+];
+
+const menusMCR = [
+  { id: 0, name: "Dashboard", link: "/marketing-coordinator" },
+  { id: 1, name: "Articles", link: "/marketing-coordinator/articles" },
+];
+const menusGuest = [
+  { id: 0, name: "Dashboard", link: "/guest" },
+  { id: 1, name: "Articles", link: "/guest/articles" },
+];
+const menusStudent = [{ id: 0, name: "Articles", link: "/student/articles" }];
+
+export const getMenus = (profile) => {
+  if (profile?.role === "admin") {
+    return menusAdmin;
+  }
+  if (profile?.role === "marketing coordinator") {
+    return menusMCR;
+  }
+  if (profile?.role === "guest") {
+    return menusGuest;
+  }
+  if (profile?.role === "student") {
+    return menusStudent;
+  }
+  return menusMMR;
+};

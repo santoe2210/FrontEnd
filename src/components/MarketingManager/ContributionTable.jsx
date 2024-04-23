@@ -418,34 +418,34 @@ function ContributionTable({ lists, usrToken }) {
 
   return (
     <>
-      <div className="pb-12 flex justify-between items-end xlmx:flex-col">
+      <div className="pb-12 flex justify-between items-end mdmx:flex-col mdmx:items-start mdmx:space-y-5">
         <form
           noValidate
           onSubmit={handleOnSubmitInput}
           autoComplete="off"
-          className="flex items-end xlmx:flex-col"
+          className="flex items-end mdmx:flex-col mdmx:items-start mdmx:space-y-5"
         >
-          <div className="mt-1 mr-4 relative rounded-md">
-            <label
-              htmlFor="searchUser"
-              className="block p2 font-bold text-gray-500"
-            >
-              Search
-            </label>
-            <Input
-              type="text"
-              name="searchUser"
-              id="searchUser"
-              value={filterInput}
-              ref={searchInputRef}
-              onChange={handleFilterChange}
-              className="default-input min-w-[350px]"
-              placeholder="Name, Email"
-            />
+          <div className="mt-1 flex items-end space-x-4 mr-5 relative rounded-md">
+            <div>
+              <label
+                htmlFor="searchUser"
+                className="block p2 font-bold text-gray-500"
+              >
+                Search
+              </label>
+              <Input
+                type="text"
+                name="searchUser"
+                id="searchUser"
+                value={filterInput}
+                ref={searchInputRef}
+                onChange={handleFilterChange}
+                className="default-input min-w-[350px] smmx:min-w-[150px]"
+                placeholder="Name, Email"
+              />
+            </div>
+            <Button type="submit">Search</Button>
           </div>
-          <Button type="submit" className="mr-9">
-            Search
-          </Button>
 
           <Button type="button" onClick={handleDownload}>
             Export .CSV

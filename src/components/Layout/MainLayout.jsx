@@ -11,7 +11,8 @@ function MainLayout({ children }) {
   return (
     <main
       className={cn(
-        !paths.some((path) => pathname.startsWith(path)) && "ml-56",
+        !paths.some((path) => pathname.startsWith(path)) &&
+          "ml-56 mdmax992:ml-0",
         "mt-20 relative"
       )}
     >

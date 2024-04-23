@@ -33,10 +33,10 @@ function ActivateEmail() {
   }, [searchid, searchtk]);
 
   return (
-    <div className="flex-grow p-[4em] flex flex-col items-center justify-center max-w-[550px] mx-auto text-center">
+    <div className="flex-grow p-[4em] smmx:p-0 flex flex-col items-center justify-center max-w-[550px] mx-auto smmx:mx-4 text-center">
       <FontAwesomeIcon
         icon={faCircleCheck}
-        className="text-[100px] text-positive"
+        className="text-[100px] smmx:text-[70px] text-positive"
       />
       <h4 className="mt-7 font-bold">Activation Completed</h4>
       <p>{activate ? "activated" : "failed"}</p>
